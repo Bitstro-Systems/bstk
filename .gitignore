@@ -1,0 +1,7 @@
+# .gitignore
+
+# Copyright (c) Bitstro Systems. All rights reserved.
+# Licensed under BSDL 1.0
+
+/build
+/CMakeUserPresets.json

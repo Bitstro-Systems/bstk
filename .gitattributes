@@ -1,0 +1,6 @@
+# .gitattributes
+
+# Copyright (c) Bitstro Systems. All rights reserved.
+# Licensed under BSDL 1.0
+
+* text=auto
