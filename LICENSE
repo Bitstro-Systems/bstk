@@ -1,0 +1,198 @@
+Bitstro Systems Developer License (BSDL)
+Version 1.0
+
+Copyright (c) Bitstro Systems
+All rights reserved.
+
+This Bitstro Systems Developer License (“License”) governs your use of
+Bitstro Systems software development kits, tools, libraries, headers,
+binaries, documentation, source code (if provided), and related materials
+(collectively, the “Licensed Materials”).
+
+BY INSTALLING, ACCESSING, OR USING THE LICENSED MATERIALS, YOU AGREE TO
+BE BOUND BY THE TERMS OF THIS LICENSE.
+
+-----------------------------------------------------------------------
+
+1. LICENSE GRANT
+
+Subject to your continued compliance with this License, Bitstro Systems
+grants you a limited, non-exclusive, non-transferable, non-sublicensable
+license to:
+
+a) Install and use the Licensed Materials solely for internal development,
+   testing, evaluation, and maintenance of software applications or
+   systems (“Products”);
+
+b) Develop proprietary, closed-source, or commercial Products that depend
+   on, interface with, or are built using the Licensed Materials;
+
+c) Distribute Products you develop, including commercial distribution,
+   provided such Products comply with the redistribution requirements
+   set forth in Section 3.
+
+No rights are granted except as expressly stated in this License.
+
+-----------------------------------------------------------------------
+
+2. SOURCE AVAILABILITY AND USE LIMITATIONS
+
+The Licensed Materials may be provided in source code form solely for the
+purpose of inspection, reference, debugging, and understanding how the
+Licensed Materials operate and interact with your Product.
+
+The Licensed Materials are source-available but not open-source.
+Access to source code does not grant any right to modify, compile,
+recompile, or redistribute it.
+
+You must not represent, advertise, or imply that the Licensed Materials
+are open-source or licensed under any open-source license.
+
+-----------------------------------------------------------------------
+
+3. DISTRIBUTION OF PRODUCTS
+
+You may distribute Products developed using the Licensed Materials,
+including Products that include certain Licensed Materials in binary
+form, only under the following conditions:
+
+a) The Licensed Materials may be distributed solely as an integrated and
+   inseparable part of your Product, and only to the extent strictly
+   necessary for the Product to function as intended;
+
+b) The Licensed Materials must not be distributed as a standalone,
+   downloadable, installable, or reusable product, SDK, library,
+   framework, or tool;
+
+c) You must not provide the Licensed Materials in any manner that enables
+   third parties to independently extract, reuse, download, install,
+   access, or redistribute them apart from your Product;
+
+d) You must not market, promote, or describe the Licensed Materials as a
+   general-purpose SDK, framework, platform, or developer tool;
+
+e) The primary purpose of any distribution must be the functionality of
+   your Product, not the delivery or exposure of the Licensed Materials.
+
+For clarity: distributing embedded runtime binaries solely to enable your
+Product’s operation is permitted; distributing the Licensed Materials for
+third-party development, access, or reuse is not.
+
+-----------------------------------------------------------------------
+
+4. PRODUCT SCOPE LIMITATION
+
+For the avoidance of doubt, “Products” do not include software, services,
+platforms, or environments whose primary purpose is to provide
+development, extension, scripting, integration, or execution capabilities
+to third parties using the Licensed Materials.
+
+You may not use the Licensed Materials to offer the functionality of the
+Licensed Materials as a service, platform, SDK, or infrastructure to
+third parties.
+
+-----------------------------------------------------------------------
+
+5. RESTRICTIONS
+
+Except as expressly permitted by this License, you must not, and must not
+permit others to:
+
+a) Modify, adapt, translate, enhance, patch, or otherwise alter the
+   Licensed Materials, in whole or in part;
+
+b) Compile, recompile, rebuild, or generate new binaries from the
+   Licensed Materials, including from any source code made available to
+   you;
+
+c) Create derivative works of the Licensed Materials;
+
+d) Reverse engineer, decompile, or disassemble the Licensed Materials,
+   except to the extent expressly permitted by applicable law;
+
+e) Fork, mirror, publish, host, or otherwise make the Licensed Materials
+   available, whether publicly or privately;
+
+f) Redistribute, sublicense, rent, lease, lend, sell, or otherwise make
+   the Licensed Materials available on a standalone basis;
+
+g) Use the Licensed Materials to develop, assist in the development of,
+   or enable competing SDKs, frameworks, platforms, system software, or
+   developer tools;
+
+h) Remove, alter, or obscure any proprietary notices or labels contained
+   in the Licensed Materials.
+
+Mere inspection or analysis of the Licensed Materials is permitted; any
+modification, recompilation, or derivative use is strictly prohibited.
+
+-----------------------------------------------------------------------
+
+6. OWNERSHIP AND INTELLECTUAL PROPERTY
+
+The Licensed Materials are licensed, not sold.
+
+All right, title, and interest in and to the Licensed Materials, including
+all intellectual property rights therein, remain exclusively with
+Bitstro Systems and its licensors.
+
+You retain ownership of your Products, excluding any Licensed Materials
+contained therein.
+
+No patent rights are granted under this License, except to the limited
+extent necessary to use the Licensed Materials as expressly permitted
+herein.
+
+-----------------------------------------------------------------------
+
+7. TRADEMARKS
+
+This License does not grant you any rights to use Bitstro Systems’
+trademarks, service marks, logos, or branding, except as required for
+accurate identification of the Licensed Materials in unmodified form.
+
+-----------------------------------------------------------------------
+
+8. TERMINATION
+
+This License is effective until terminated.
+
+Bitstro Systems may terminate this License immediately upon material
+breach. For non-material breaches, Bitstro Systems may provide written
+notice and a reasonable opportunity to cure prior to termination.
+
+Upon termination, you must immediately cease all use of the Licensed
+Materials and destroy all copies in your possession or control.
+
+Sections 2, 4, 5, 6, 8, 9, 10, and 11 shall survive termination.
+
+-----------------------------------------------------------------------
+
+9. DISCLAIMER OF WARRANTY
+
+THE LICENSED MATERIALS ARE PROVIDED “AS IS” AND “AS AVAILABLE,” WITHOUT
+WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+NON-INFRINGEMENT.
+
+-----------------------------------------------------------------------
+
+10. LIMITATION OF LIABILITY
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL BITSTRO SYSTEMS
+BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR
+EXEMPLARY DAMAGES ARISING OUT OF OR IN CONNECTION WITH THIS LICENSE OR THE
+USE OF THE LICENSED MATERIALS.
+
+-----------------------------------------------------------------------
+
+11. GOVERNING LAW
+
+This License shall be governed by and construed in accordance with the
+laws of the Republic of Poland, excluding its conflict of law rules and the
+United Nations Convention on Contracts for the International Sale of
+Goods (CISG).
+
+-----------------------------------------------------------------------
+
+END OF TERMS AND CONDITIONS
