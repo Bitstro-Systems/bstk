@@ -1,0 +1,74 @@
+# build-and-test-windows.yml
+
+# Copyright (c) Bitstro Systems. All rights reserved.
+# Licensed under BSDL 1.0
+
+name: Build and test (Windows)
+on:
+  push:
+    paths-ignore:
+      - '**/**.md'
+      
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        compiler: [GCC, MSVC]
+        arch: [x64, x86]
+        config: [Debug, Release]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Install Ninja
+        run: |
+          choco install ninja
+
+      - name: Set up MinGW
+        if: ${{ matrix.compiler == 'GCC' }}
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: ${{ matrix.arch }}
+          version: 12.2.0 # workaround
+
+      - name: Set up MSVC toolchain
+        if: ${{ matrix.compiler == 'MSVC' }}
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.arch }}
+          vsversion: 2022
+
+      - name: Configure project (x64 GCC)
+        if: ${{ matrix.compiler == 'GCC' && matrix.arch == 'x64' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-m64"
+          -DBSTK_BUILD_BENCHMARKS=ON -DBSTK_BUILD_TESTS=ON
+
+      - name: Configure project (x86 GCC)
+        if: ${{ matrix.compiler == 'GCC' && matrix.arch == 'x86' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
+          -DBSTK_BUILD_BENCHMARKS=ON -DBSTK_BUILD_TESTS=ON
+
+      - name: Configure project (MSVC)
+        if: ${{ matrix.compiler == 'MSVC' }}
+        run: >
+          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=cl
+          -DCMAKE_CXX_COMPILER=cl -DBSTK_BUILD_BENCHMARKS=ON
+          -DBSTK_BUILD_TESTS=ON -DBSTK_INSTALL_LIBRARY=ON
+
+      - name: Build project
+        run: |
+          cmake --build build/${{ matrix.arch }} --preset=${{ matrix.arch }} --config ${{ matrix.config }}
+
+      - name: Run tests
+        run: |
+          ctest --test-dir build/${{ matrix.arch }}/tests --output-on-failure -C ${{ matrix.config }}
