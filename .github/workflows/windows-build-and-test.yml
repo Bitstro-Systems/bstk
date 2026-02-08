@@ -1,0 +1,50 @@
+# windows-build-and-test.yml
+
+# Copyright (c) Bitstro Systems. All rights reserved.
+# Licensed under BSDL 1.0
+
+name: Build & Test (Windows)
+on:
+  workflow_call:
+      
+jobs:
+  windows-build-and-test:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [x64, x86]
+        config: [Debug, Release]
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Update submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Install Ninja
+        run: |
+          choco install ninja
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.arch }}
+          vsversion: 2022
+
+      - name: Configure project
+        run: >
+          cmake --preset=${{ matrix.arch }}
+          -DCMAKE_C_COMPILER=cl
+          -DCMAKE_CXX_COMPILER=cl
+          -DBSTK_BUILD_BENCHMARKS=ON
+          -DBSTK_BUILD_TESTS=ON
+
+      - name: Build project
+        run: |
+          cmake --build build/${{ matrix.arch }} --preset=${{ matrix.arch }} --config ${{ matrix.config }}
+
+      - name: Run tests
+        run: |
+          ctest --test-dir build/${{ matrix.arch }}/tests --output-on-failure -C ${{ matrix.config }}

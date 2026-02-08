@@ -1,25 +1,22 @@
-# build-and-test-linux.yml
+# linux-build-and-test.yml
 
 # Copyright (c) Bitstro Systems. All rights reserved.
 # Licensed under BSDL 1.0
 
-name: Build and test (Linux)
+name: Build & Test (Linux)
 on:
-  push:
-    paths-ignore:
-      - '**/**.md'
+  workflow_call:
       
 jobs:
-  build-and-test:
+  linux-build-and-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        compiler: [GCC]
         arch: [x64, x86]
         config: [Debug, Release]
 
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v4
 
       - name: Update submodules
@@ -31,25 +28,20 @@ jobs:
           sudo apt-get install ninja-build
 
       - name: Set up GCC
-        if: ${{ matrix.compiler == 'GCC' }}
         uses: egor-tensin/setup-gcc@v1
         with:
           version: latest
           platform: ${{ matrix.arch }}
 
-      - name: Configure project (x64 GCC)
-        if: ${{ matrix.compiler == 'GCC' && matrix.arch == 'x64' }}
+      - name: Configure project
         run: >
-          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc
-          -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_FLAGS="-m64" -DCMAKE_CXX_FLAGS="-m64"
-          -DBSTK_BUILD_BENCHMARKS=ON -DBSTK_BUILD_TESTS=ON
-
-      - name: Configure project (x86 GCC)
-        if: ${{ matrix.compiler == 'GCC' && matrix.arch == 'x86' }}
-        run: >
-          cmake --preset=${{ matrix.arch }} -DCMAKE_C_COMPILER=gcc
-          -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_FLAGS="-m32" -DCMAKE_CXX_FLAGS="-m32"
-          -DBSTK_BUILD_BENCHMARKS=ON -DBSTK_BUILD_TESTS=ON
+          cmake --preset=${{ matrix.arch }}
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=g++
+          -DCMAKE_C_FLAGS="-m${{ matrix.arch == 'x64' && '64' || '32' }}"
+          -DCMAKE_CXX_FLAGS="-m${{ matrix.arch == 'x64' && '64' || '32' }}"
+          -DBSTK_BUILD_BENCHMARKS=ON
+          -DBSTK_BUILD_TESTS=ON
 
       - name: Build project
         run: |
