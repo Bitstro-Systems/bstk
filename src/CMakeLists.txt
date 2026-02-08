@@ -40,6 +40,13 @@ else()
     message(FATAL_ERROR "Detected unsupported compiler: ${CMAKE_CXX_COMPILER_ID}")
 endif()
 
+# detect unsupported compiler and platform combination, terminate if not allowed
+if(WIN32 AND NOT ${is_msvc})
+    message(FATAL_ERROR "Only MSVC is supported on Windows.")
+elseif(UNIX AND NOT ${is_gcc})
+    message(FATAL_ERROR "Only GCC is supported on Linux.")
+endif()
+
 # detect the architecture and set the corresponding definition, terminate if the architecture is not supported
 if(${BSTK_PLATFORM_ARCH} STREQUAL "x64")
     list(APPEND BSTK_INTERNAL_DEFS _BSTK_X64=1)
@@ -50,8 +57,7 @@ else()
     message(FATAL_ERROR "Unsupported platform architecture detected.")
 endif()
 
-# detect the byte order and set the corresponding definition,
-# terminate if unable to detect the byte order
+# detect the byte order and set the corresponding definition, terminate if unable to detect the byte order
 if(CMAKE_CXX_BYTE_ORDER STREQUAL "LITTLE_ENDIAN")
     list(APPEND BSTK_INTERNAL_DEFS _BSTK_LITTLE_ENDIAN=1)
 elseif(CMAKE_CXX_BYTE_ORDER STREQUAL "BIG_ENDIAN")
@@ -92,20 +98,26 @@ target_compile_features(bstk PRIVATE cxx_std_20)
 target_include_directories(bstk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(bstk PROPERTIES PREFIX "") # prevent compilers from adding "lib" prefix
 
-# Note: GCC doesn't generates LIB files, as it uses its own archive files. To maintain compatibility
-#       between compilers, it must generate a LIB file. To do so, 'pexports' and 'dlltool' tools can be used,
-#       the first one to generate definition file (DEF), and the second one to generate a LIB file.
-if(${is_gcc} AND WIN32)
-    set(target_dir "$<TARGET_FILE_DIR:bstk>")
-    add_custom_command(TARGET bstk POST_BUILD
-        COMMAND pexports ${target_dir}/bstk.dll > ${target_dir}/bstk.def
-        COMMAND dlltool -d ${target_dir}/bstk.def -l ${target_dir}/bstk.lib
-    )
-    unset(target_dir)
-endif()
-
-# Note: RC files are used only on Windows and are compiled with rc.exe (MSVC) or
-#       windres.exe (GCC). Therefore, they are included only when compiling for Windows.
+# Note: RC files are used only on Windows and are compiled with rc.exe tool.
+#       Therefore, they are included only when compiling for Windows.
 if(WIN32)
     target_sources(bstk PRIVATE ${BSTK_RES_FILES})
+endif()
+
+# setup debug symbol generation for all supported compilers
+if(${is_gcc})
+    # generate DWARF symbols and extract them into a separate DEBUG file
+    target_compile_options(bstk PRIVATE "-g")
+
+    set(debug_file "$<TARGET_FILE_DIR:bstk>/$<TARGET_FILE_BASE_NAME:bstk>.debug")
+    add_custom_command(TARGET bstk POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} --only-keep-debug $<TARGET_FILE:bstk> ${debug_file}
+        COMMAND ${CMAKE_OBJCOPY} --add-gnu-debuglink=${debug_file} $<TARGET_FILE:bstk>
+        COMMAND ${CMAKE_STRIP} --strip-debug $<TARGET_FILE:bstk>
+    )
+    unset(debug_file)
+elseif(${is_msvc})
+    # generate PDB file in both Debug and Release mode
+    target_compile_options(bstk PRIVATE "/Zi")
+    target_link_options(bstk PRIVATE "/DEBUG")
 endif()
