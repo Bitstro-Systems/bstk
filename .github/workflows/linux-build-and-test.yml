@@ -6,6 +6,11 @@
 name: Build & Test (Linux)
 on:
   workflow_call:
+    inputs:
+      enable_asan:
+        description: 'Enable AddressSanitizer (ASan).'
+        default: false
+        type: boolean
       
 jobs:
   linux-build-and-test:
@@ -42,6 +47,7 @@ jobs:
           -DCMAKE_CXX_FLAGS="-m${{ matrix.arch == 'x64' && '64' || '32' }}"
           -DBSTK_BUILD_BENCHMARKS=ON
           -DBSTK_BUILD_TESTS=ON
+          ${{ inputs.enable_asan && '-DBSTK_BUILD_WITH_ASAN=ON' || '' }}
 
       - name: Build project
         run: |

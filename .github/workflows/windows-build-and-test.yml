@@ -6,6 +6,11 @@
 name: Build & Test (Windows)
 on:
   workflow_call:
+    inputs:
+      enable_asan:
+        description: 'Enable AddressSanitizer (ASan).'
+        default: false
+        type: boolean
       
 jobs:
   windows-build-and-test:
@@ -40,6 +45,7 @@ jobs:
           -DCMAKE_CXX_COMPILER=cl
           -DBSTK_BUILD_BENCHMARKS=ON
           -DBSTK_BUILD_TESTS=ON
+          ${{ inputs.enable_asan && '-DBSTK_BUILD_WITH_ASAN=ON' || '' }}
 
       - name: Build project
         run: |
