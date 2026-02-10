@@ -1,0 +1,21 @@
+# build-and-test-asan.yml
+
+# Copyright (c) Bitstro Systems. All rights reserved.
+# Licensed under BSDL 1.0
+
+name: Build & Test (ASan)
+on:
+  push:
+    paths-ignore:
+      - '**/**.md'
+
+jobs:
+  linux:
+    uses: './.github/workflows/linux-build-and-test.yml'
+    with:
+      enable_asan: true
+    
+  windows:
+    uses: './.github/workflows/windows-build-and-test.yml'
+    with:
+      enable_asan: true

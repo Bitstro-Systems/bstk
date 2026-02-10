@@ -121,3 +121,7 @@ elseif(${is_msvc})
     target_compile_options(bstk PRIVATE "/Zi")
     target_link_options(bstk PRIVATE "/DEBUG")
 endif()
+
+if(BSTK_BUILD_WITH_ASAN)
+    enable_asan_for_target(bstk)
+endif()
