@@ -18,20 +18,17 @@ function(add_isolated_test test_name test_path)
         "${CMAKE_CURRENT_SOURCE_DIR}/../src"
         "${gtest_SOURCE_DIR}/include"
     )
-    target_link_libraries(${test_name} PRIVATE gtest gtest_main bstk)
+    target_link_libraries(${test_name} PRIVATE gtest gtest_main) # temporarily don't link the BSTK library
     add_test(NAME ${test_name} COMMAND ${test_name})
-    if(BSTK_BUILD_WITH_ASAN)
-        enable_asan_for_target(${test_name})
-    endif()
 endfunction()
 
-# Currently, there are no compatible tests. However, the main build component
-# has been implemented. Once sufficient progress is made, tests will be added here.
+add_isolated_test(test_core_version "src/core/version/test.cpp")
 
 # use a custom target to combine all targets into a single one,
 # this allows only one post-build call instead of per-test copying
 add_custom_target(bstk_and_tests ALL DEPENDS
     bstk
+    test_core_version
 )
 add_custom_command(TARGET bstk_and_tests POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different

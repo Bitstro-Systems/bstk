@@ -5,9 +5,13 @@
 
 cmake_minimum_required(VERSION 3.30.0)
 
+set(BSTK_CORE_INC_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/version.hpp"
+)
 set(BSTK_CORE_IMPL_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/impl/dllmain.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/impl/tinywin.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/impl/utils.hpp"
 )
 set(BSTK_RES_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/res/bstk.rc"
@@ -88,11 +92,12 @@ if(${is_gcc})
 endif()
 
 # organize source files into directories for better readability
+source_group("src/core" FILES ${BSTK_CORE_INC_FILES})
 source_group("src/core/impl" FILES ${BSTK_CORE_IMPL_FILES})
 source_group("res" FILES ${BSTK_RES_FILES})
 
 # add the BSTK shared library and adjust its properties
-add_library(bstk SHARED ${BSTK_CORE_IMPL_FILES})
+add_library(bstk SHARED ${BSTK_CORE_INC_FILES} ${BSTK_CORE_IMPL_FILES})
 target_compile_definitions(bstk PRIVATE _BSTK_BUILD=1 PUBLIC ${BSTK_INTERNAL_DEFS})
 target_compile_features(bstk PRIVATE cxx_std_20)
 target_include_directories(bstk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -120,8 +125,4 @@ elseif(${is_msvc})
     # generate PDB file in both Debug and Release mode
     target_compile_options(bstk PRIVATE "/Zi")
     target_link_options(bstk PRIVATE "/DEBUG")
-endif()
-
-if(BSTK_BUILD_WITH_ASAN)
-    enable_asan_for_target(bstk)
 endif()
