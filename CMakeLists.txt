@@ -15,16 +15,15 @@ option(BSTK_BUILD_BENCHMARKS "Build BSTK library benchmarks" OFF)
 option(BSTK_BUILD_TESTS "Build BSTK library tests" OFF)
 option(BSTK_BUILD_WITH_ASAN "Build BSTK library with AddressSanitizer (ASan) enabled" OFF)
 
-function(enable_asan_for_target target_name)
+if(BSTK_BUILD_WITH_ASAN)
+    # enable AddressSanitizer (ASan) for all targets
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_compile_options(${target_name} PRIVATE
-            -fsanitize=address -fno-omit-frame-pointer)
-        target_link_options(${target_name} PRIVATE -fsanitize=address)
+        add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+        add_link_options(-fsanitize=address)
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        target_compile_options(${target_name} PRIVATE
-            /fsanitize=address /fno-sanitize-address-vcasan-lib)
+        add_compile_options(/fsanitize=address /fno-sanitize-address-vcasan-lib /Zi)
     endif()
-endfunction()
+endif()
 
 # build the BSTK library before building any benchmarks and tests
 add_subdirectory(src "${CMAKE_CURRENT_BINARY_DIR}/library")

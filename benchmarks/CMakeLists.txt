@@ -24,10 +24,6 @@ function(add_isolated_benchmark benchmark_name benchmark_path)
         # link against Shlwapi.lib, a Windows-specific statically-linked library
         target_link_libraries(${benchmark_name} PRIVATE Shlwapi)
     endif()
-
-    if(BSTK_BUILD_WITH_ASAN)
-        enable_asan_for_target(${benchmark_name})
-    endif()
 endfunction()
 
 # Currently, there are no compatible benchmarks. However, the main build component

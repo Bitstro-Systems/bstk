@@ -50,7 +50,7 @@ namespace bs {
         _Test_version_encoding(38963, 59099, 61202);
     }
 
-    TEST(version, version_bounds) {
+    TEST(version, bounds) {
         _Test_version_bounds(2, 15, 0xFFFF'FF01);
         _Test_version_bounds(51, 0xFFFF'FF02, 62);
         _Test_version_bounds(0x0001'0000, 734, 913);
