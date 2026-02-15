@@ -6,15 +6,20 @@
 name: Build & Test (ASan)
 on:
   push:
+    branches-ignore:
+      - 'main'
+      - 'release/**'
     paths-ignore:
       - '**/**.md'
+      
+  workflow_call:
 
 jobs:
   linux:
     uses: './.github/workflows/linux-build-and-test.yml'
     with:
       enable_asan: true
-    
+
   windows:
     uses: './.github/workflows/windows-build-and-test.yml'
     with:

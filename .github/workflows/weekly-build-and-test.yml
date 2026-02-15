@@ -1,22 +1,16 @@
-# build-and-test.yml
+# weekly-build-and-test.yml
 
 # Copyright (c) Bitstro Systems. All rights reserved.
 # Licensed under BSDL 1.0
 
-name: Build & Test
+name: Weekly Build & Test
 on:
-  push:
-    branches-ignore:
-      - 'main'
-      - 'release/**'
-    paths-ignore:
-      - '**/**.md'
-
-  workflow_call:
+  schedule:
+    - cron: '0 0 * * 1' # every Monday at 00:00 UTC
 
 jobs:
-  linux:
+  weekly-linux:
     uses: './.github/workflows/linux-build-and-test.yml'
     
-  windows:
+  weekly-windows:
     uses: './.github/workflows/windows-build-and-test.yml'
