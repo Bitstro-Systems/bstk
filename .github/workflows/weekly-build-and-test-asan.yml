@@ -1,0 +1,16 @@
+# weekly-build-and-test-asan.yml
+
+# Copyright (c) Bitstro Systems. All rights reserved.
+# Licensed under BSDL 1.0
+
+name: Weekly Build & Test (ASan)
+on:
+  schedule:
+    - cron: '0 0 * * 1' # every Monday at 00:00 UTC
+
+jobs:
+  weekly-linux:
+    uses: './.github/workflows/linux-build-and-test-asan.yml'
+    
+  weekly-windows:
+    uses: './.github/workflows/windows-build-and-test-asan.yml'
