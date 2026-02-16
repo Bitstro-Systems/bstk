@@ -9,8 +9,12 @@ on:
     - cron: '0 0 * * 1' # every Monday at 00:00 UTC
 
 jobs:
-  weekly-linux:
-    uses: './.github/workflows/linux-build-and-test-asan.yml'
-    
-  weekly-windows:
-    uses: './.github/workflows/windows-build-and-test-asan.yml'
+  linux:
+    uses: './.github/workflows/linux-build-and-test.yml'
+    with:
+      enable_asan: true
+
+  windows:
+    uses: './.github/workflows/windows-build-and-test.yml'
+    with:
+      enable_asan: true
