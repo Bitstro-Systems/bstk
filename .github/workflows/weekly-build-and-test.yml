@@ -9,8 +9,8 @@ on:
     - cron: '0 0 * * 1' # every Monday at 00:00 UTC
 
 jobs:
-  weekly-linux:
+  linux:
     uses: './.github/workflows/linux-build-and-test.yml'
     
-  weekly-windows:
+  windows:
     uses: './.github/workflows/windows-build-and-test.yml'
