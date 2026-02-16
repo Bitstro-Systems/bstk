@@ -1,0 +1,45 @@
+# increment-patch-version.yml
+
+# Copyright (c) Bitstro Systems. All rights reserved.
+# Licensed under BSDL 1.0
+
+name: Increment Patch Version
+on:
+  push:
+    branches:
+      - 'release/**'
+    paths:
+      - 'src/bstk/**'
+    paths-ignore:
+      - 'src/bstk/res/**'
+
+permissions:
+  contents: write
+
+jobs:
+  increment_patch_version:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Increment patch version
+        run: >
+          ./tools/Increment-PatchVersion.ps1
+
+      - name: Configure Git
+        run: >
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Commit and push changes
+        run: >
+          git add ./tools/version
+          if (-not (git diff --cached --quiet)) {
+            git commit -m "(AUTO) Increment patch version"
+            git push origin ${{ github.ref_name }}
+          }
