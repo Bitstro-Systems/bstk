@@ -96,6 +96,23 @@ if(${is_gcc})
     endif()
 endif()
 
+# detect the library version and set the corresponding definitions, terminate if unable to read or parse the version
+file(READ "${CMAKE_SOURCE_DIR}/tools/version" library_version)
+string(STRIP "${library_version}" library_version)
+if(NOT library_version MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
+    message(FATAL_ERROR "Library version format is invalid: ${library_version}")
+endif()
+
+# validate the format and retrieve the components
+string(REGEX MATCHALL "[0-9]+" version_components "${library_version}")
+list(GET version_components 0 version_major)
+list(GET version_components 1 version_minor)
+list(GET version_components 2 version_patch)
+
+list(APPEND BSTK_INTERNAL_DEFS "_BSTK_VERSION_MAJOR=${version_major}")
+list(APPEND BSTK_INTERNAL_DEFS "_BSTK_VERSION_MINOR=${version_minor}")
+list(APPEND BSTK_INTERNAL_DEFS "_BSTK_VERSION_PATCH=${version_patch}")
+
 # organize source files into directories for better readability
 source_group("src/core" FILES ${BSTK_CORE_INC_FILES} ${BSTK_CORE_SRC_FILES})
 source_group("src/core/impl" FILES ${BSTK_CORE_IMPL_FILES})

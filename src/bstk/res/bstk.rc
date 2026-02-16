@@ -12,8 +12,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_NEUTRAL
 #pragma code_page(65001)
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION    1, 0, 0, 0
-PRODUCTVERSION 1, 0, 0, 0
+FILEVERSION    _BSTK_VERSION_MAJOR, _BSTK_VERSION_MINOR, _BSTK_VERSION_PATCH, 0
+PRODUCTVERSION _BSTK_VERSION_MAJOR, _BSTK_VERSION_MINOR, _BSTK_VERSION_PATCH, 0
 FILEFLAGSMASK  0x3FL
 #ifdef _DEBUG
 FILEFLAGS      VS_FF_DEBUG
@@ -30,12 +30,10 @@ BEGIN
         BEGIN
             VALUE "CompanyName",      "Bitstro Systems"
             VALUE "FileDescription",  "Bitstro Systems Toolkit"
-            VALUE "FileVersion",      "1.0.0.0"
             VALUE "InternalName",     "bstk.dll"
             VALUE "LegalCopyright",   "Copyright © Bitstro Systems. All rights reserved."
             VALUE "OriginalFilename", "bstk.dll"
             VALUE "ProductName",      "Bitstro Systems Toolkit"
-            VALUE "ProductVersion",   "1.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
