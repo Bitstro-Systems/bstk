@@ -10,8 +10,7 @@ on:
       - 'release/**'
     paths:
       - 'src/bstk/**'
-    paths-ignore:
-      - 'src/bstk/res/**'
+      - '!src/bstk/res/**'
 
 permissions:
   contents: write
