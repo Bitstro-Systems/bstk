@@ -20,7 +20,6 @@ namespace bs {
 
     void _Test_version_encoding(
         const uint64_t _Major, const uint64_t _Minor, const uint64_t _Patch) noexcept {
-        // verify that encoding and decoding preserves the version components exactly
         const auto _Version = _Decode_version(_ENCODE_VERSION(_Major, _Minor, _Patch));
         EXPECT_EQ(_Version._Major, _Major);
         EXPECT_EQ(_Version._Minor, _Minor);
@@ -29,7 +28,6 @@ namespace bs {
 
     void _Test_version_bounds(
         const uint64_t _Major, const uint64_t _Minor, const uint64_t _Patch) noexcept {
-        // verify that encoding truncates components that exceed their bit-field limits
         const auto _Version       = _Decode_version(_ENCODE_VERSION(_Major, _Minor, _Patch));
         const bool _Correct_major = _Version._Major == _Major;
         const bool _Correct_minor = _Version._Minor == _Minor;
