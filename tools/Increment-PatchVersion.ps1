@@ -3,7 +3,7 @@
 # Copyright (c) Bitstro Systems. All rights reserved.
 # Licensed under BSDL 1.0
 
-$VersionFile = '.\version'
+$VersionFile = Join-Path $PSScriptRoot 'version'
 
 # writes a log message with a timestamp to the output
 function Log-Message {
