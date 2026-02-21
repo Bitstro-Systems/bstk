@@ -22,6 +22,7 @@ function(add_isolated_test test_name test_path)
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 
+add_isolated_test(test_core_bitmask "src/core/bitmask/test.cpp")
 add_isolated_test(test_core_exception "src/core/exception/test.cpp")
 add_isolated_test(test_core_version "src/core/version/test.cpp")
 
@@ -29,6 +30,7 @@ add_isolated_test(test_core_version "src/core/version/test.cpp")
 # this allows only one post-build call instead of per-test copying
 add_custom_target(bstk_and_tests ALL DEPENDS
     bstk
+    test_core_bitmask
     test_core_exception
     test_core_version
 )
