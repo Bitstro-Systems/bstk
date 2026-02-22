@@ -20,7 +20,7 @@ namespace bs {
 
     void _Test_version_encoding(
         const uint64_t _Major, const uint64_t _Minor, const uint64_t _Patch) noexcept {
-        const auto _Version = _Decode_version(_ENCODE_VERSION(_Major, _Minor, _Patch));
+        const auto _Version = _Decode_version(_BSTK_ENCODE_VERSION(_Major, _Minor, _Patch));
         EXPECT_EQ(_Version._Major, _Major);
         EXPECT_EQ(_Version._Minor, _Minor);
         EXPECT_EQ(_Version._Patch, _Patch);
@@ -28,7 +28,7 @@ namespace bs {
 
     void _Test_version_bounds(
         const uint64_t _Major, const uint64_t _Minor, const uint64_t _Patch) noexcept {
-        const auto _Version       = _Decode_version(_ENCODE_VERSION(_Major, _Minor, _Patch));
+        const auto _Version       = _Decode_version(_BSTK_ENCODE_VERSION(_Major, _Minor, _Patch));
         const bool _Correct_major = _Version._Major == _Major;
         const bool _Correct_minor = _Version._Minor == _Minor;
         const bool _Correct_patch = _Version._Patch == _Patch;
