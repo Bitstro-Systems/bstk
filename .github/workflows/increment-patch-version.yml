@@ -12,6 +12,8 @@ on:
       - 'src/bstk/**'
       - '!src/bstk/res/**'
 
+  workflow_dispatch:
+        
 jobs:
   increment_patch_version:
     runs-on: windows-latest
@@ -20,7 +22,9 @@ jobs:
 
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
 
       - name: Increment patch version
         shell: pwsh
@@ -33,6 +37,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
 
       - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git add ./tools/version
           git commit -m "(AUTO) Increment patch version"
