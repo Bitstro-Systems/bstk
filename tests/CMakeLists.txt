@@ -26,6 +26,7 @@ add_isolated_test(test_core_bitmask "src/core/bitmask/test.cpp")
 add_isolated_test(test_core_exception "src/core/exception/test.cpp")
 add_isolated_test(test_core_version "src/core/version/test.cpp")
 add_isolated_test(test_memory_allocator "src/memory/allocator/test.cpp")
+add_isolated_test(test_memory_reference_counter "src/memory/reference_counter/test.cpp")
 
 # use a custom target to combine all targets into a single one,
 # this allows only one post-build call instead of per-test copying
@@ -35,6 +36,7 @@ add_custom_target(bstk_and_tests ALL DEPENDS
     test_core_exception
     test_core_version
     test_memory_allocator
+    test_memory_reference_counter
 )
 add_custom_command(TARGET bstk_and_tests POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different

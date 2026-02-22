@@ -21,9 +21,11 @@ set(BSTK_CORE_IMPL_FILES
 )
 set(BSTK_MEMORY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/allocator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.hpp"
 )
 set(BSTK_MEMORY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/allocator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.cpp"
 )
 set(BSTK_RES_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/res/bstk.rc"
