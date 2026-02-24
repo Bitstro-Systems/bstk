@@ -12,6 +12,8 @@ on:
       - 'src/bstk/**'
       - '!src/bstk/res/**'
 
+  workflow_dispatch:
+
 jobs:
   increment_patch_version:
     runs-on: windows-latest
@@ -36,4 +38,5 @@ jobs:
         run: |
           git add ./tools/version
           git commit -m "(AUTO) Increment patch version"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git push origin ${{ github.ref_name }}
