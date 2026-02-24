@@ -11,9 +11,7 @@ on:
     paths:
       - 'src/bstk/**'
       - '!src/bstk/res/**'
-
-  workflow_dispatch:
-        
+      
 jobs:
   increment_patch_version:
     runs-on: windows-latest
