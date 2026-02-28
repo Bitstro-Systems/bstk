@@ -31,14 +31,14 @@ set(BSTK_RES_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/res/bstk.rc"
 )
 
-# internal BSTK library compile definitions
-set(BSTK_INTERNAL_DEFS)
+# BSTK compile definitions (also used in products that depend on BSTK)
+set(BSTK_DEFS)
 
 # detect the platform and set the corresponding definition, terminate if the platform is not supported
 if(WIN32)
-    list(APPEND BSTK_INTERNAL_DEFS _BSTK_WINDOWS=1)
+    list(APPEND BSTK_DEFS _BS_WINDOWS=1)
 elseif(UNIX)
-    list(APPEND BSTK_INTERNAL_DEFS _BSTK_LINUX=1)
+    list(APPEND BSTK_DEFS _BS_LINUX=1)
 else()
     # unsupported platform, report an error and terminate
     message(FATAL_ERROR "Unsupported platform detected.")
@@ -49,10 +49,10 @@ set(is_gcc FALSE)
 set(is_msvc FALSE)
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(is_gcc TRUE)
-    list(APPEND BSTK_INTERNAL_DEFS _BSTK_GCC=1)
+    list(APPEND BSTK_DEFS _BS_GCC=1)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(is_msvc TRUE)
-    list(APPEND BSTK_INTERNAL_DEFS _BSTK_MSVC=1)
+    list(APPEND BSTK_DEFS _BS_MSVC=1)
 else()
     # unsupported compiler, report an error and terminate
     message(FATAL_ERROR "Detected unsupported compiler: ${CMAKE_CXX_COMPILER_ID}")
@@ -67,9 +67,9 @@ endif()
 
 # detect the architecture and set the corresponding definition, terminate if the architecture is not supported
 if(${BSTK_PLATFORM_ARCH} STREQUAL "x64")
-    list(APPEND BSTK_INTERNAL_DEFS _BSTK_X64=1)
+    list(APPEND BSTK_DEFS _BS_X64=1)
 elseif(${BSTK_PLATFORM_ARCH} STREQUAL "x86")
-    list(APPEND BSTK_INTERNAL_DEFS _BSTK_X86=1)
+    list(APPEND BSTK_DEFS _BS_X86=1)
 else()
     # unsupported architecture, report an error and terminate
     message(FATAL_ERROR "Unsupported platform architecture detected.")
@@ -77,15 +77,15 @@ endif()
 
 # detect the byte order and set the corresponding definition, terminate if unable to detect the byte order
 if(CMAKE_CXX_BYTE_ORDER STREQUAL "LITTLE_ENDIAN")
-    list(APPEND BSTK_INTERNAL_DEFS _BSTK_LITTLE_ENDIAN=1)
+    list(APPEND BSTK_DEFS _BS_LITTLE_ENDIAN=1)
 elseif(CMAKE_CXX_BYTE_ORDER STREQUAL "BIG_ENDIAN")
-    list(APPEND BSTK_INTERNAL_DEFS _BSTK_BIG_ENDIAN=1)
+    list(APPEND BSTK_DEFS _BS_BIG_ENDIAN=1)
 else()
     # failed to detect the byte order, report an error and terminate
     message(FATAL_ERROR "Byte order could not be detected.")
 endif()
 
-# detect support for 128-bit integers and set the corresponding definition (definitely not supported on MSVC)
+# detect support for 128-bit integers and set the corresponding definition
 if(${is_gcc})
     # use check_cxx_source_compiles() to detect whether a program that uses 128-bit integers will compile
     include(CheckCXXSourceCompiles)
@@ -100,27 +100,14 @@ if(${is_gcc})
         }
     ]=] int128_supported)
     if(${int128_supported})
-        # 128-bit integers are supported, append the corresponding macro
-        list(APPEND BSTK_INTERNAL_DEFS _BSTK_INT128_SUPPORTED=1)
+        list(APPEND BSTK_DEFS _BS_INT128_SUPPORTED=1)
+    else()
+        list(APPEND BSTK_DEFS _BS_INT128_SUPPORTED=0)
     endif()
+else()
+   # 128-bit integers definitely not supported on MSVC
+   list(APPEND BSTK_DEFS _BS_INT128_SUPPORTED=0)
 endif()
-
-# detect the library version and set the corresponding definitions, terminate if unable to read or parse the version
-file(READ "${CMAKE_SOURCE_DIR}/tools/version" library_version)
-string(STRIP "${library_version}" library_version)
-if(NOT library_version MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
-    message(FATAL_ERROR "Library version format is invalid: ${library_version}")
-endif()
-
-# validate the format and retrieve the components
-string(REGEX MATCHALL "[0-9]+" version_components "${library_version}")
-list(GET version_components 0 version_major)
-list(GET version_components 1 version_minor)
-list(GET version_components 2 version_patch)
-
-list(APPEND BSTK_INTERNAL_DEFS "_BSTK_VERSION_MAJOR=${version_major}")
-list(APPEND BSTK_INTERNAL_DEFS "_BSTK_VERSION_MINOR=${version_minor}")
-list(APPEND BSTK_INTERNAL_DEFS "_BSTK_VERSION_PATCH=${version_patch}")
 
 # organize source files into directories for better readability
 source_group("src/core" FILES ${BSTK_CORE_INC_FILES} ${BSTK_CORE_SRC_FILES})
@@ -131,7 +118,7 @@ source_group("res" FILES ${BSTK_RES_FILES})
 # add the BSTK shared library and adjust its properties
 add_library(bstk SHARED ${BSTK_CORE_INC_FILES} ${BSTK_CORE_SRC_FILES} ${BSTK_CORE_IMPL_FILES}
     ${BSTK_MEMORY_INC_FILES} ${BSTK_MEMORY_SRC_FILES})
-target_compile_definitions(bstk PRIVATE _BSTK_BUILD=1 PUBLIC ${BSTK_INTERNAL_DEFS})
+target_compile_definitions(bstk PRIVATE _BSTK_BUILD=1 PUBLIC ${BSTK_DEFS})
 target_compile_features(bstk PRIVATE cxx_std_20)
 target_include_directories(bstk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 set_target_properties(bstk PROPERTIES PREFIX "") # prevent compilers from adding "lib" prefix

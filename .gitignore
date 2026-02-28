@@ -4,4 +4,6 @@
 # Licensed under BSDL 1.0
 
 /build
+/src/bstk/res/*
+!/src/bstk/res/bstk.rc
 /CMakeUserPresets.json
