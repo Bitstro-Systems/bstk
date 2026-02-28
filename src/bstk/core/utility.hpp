@@ -12,9 +12,9 @@
 #define _BSTK_STRINGIFY(_Expr)      _BSTK_STRINGIFY_EXPR(_Expr)
 
 // prevents compiler from generating vtable for abstract classes
-#ifdef _BSTK_MSVC
+#ifdef _BS_MSVC
 #define _BSTK_NOVTABLE __declspec(novtable)
-#else // ^^^ _BSTK_MSVC ^^^ / vvv _BSTK_GCC vvv 
+#else // ^^^ _BS_MSVC ^^^ / vvv _BS_GCC vvv 
 #define _BSTK_NOVTABLE
-#endif // _BSTK_MSVC
+#endif // _BS_MSVC
 #endif // _BSTK_CORE_UTILITY_HPP_

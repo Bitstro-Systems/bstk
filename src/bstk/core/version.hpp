@@ -13,8 +13,11 @@
 #define _BSTK_ENCODE_VERSION(_Major, _Minor, _Patch) ((_Major << 48ULL) | (_Minor << 24ULL) | _Patch)
 
 // defines the latest BSTK library version (synchronized with the version specified in 'res/bstk.rc')
-#define BSTK_VERSION        _BSTK_ENCODE_VERSION(_BSTK_VERSION_MAJOR, _BSTK_VERSION_MINOR, _BSTK_VERSION_PATCH)
-#define BSTK_VERSION_STRING _BSTK_STRINGIFY(_BSTK_VERSION_MAJOR._BSTK_VERSION_MINOR._BSTK_VERSION_PATCH)
+#define BSTK_VERSION_MAJOR  1
+#define BSTK_VERSION_MINOR  0
+#define BSTK_VERSION_PATCH  0
+#define BSTK_VERSION        _BSTK_ENCODE_VERSION(BSTK_VERSION_MAJOR, BSTK_VERSION_MINOR, BSTK_VERSION_PATCH)
+#define BSTK_VERSION_STRING _BSTK_STRINGIFY(BSTK_VERSION_MAJOR.BSTK_VERSION_MINOR.BSTK_VERSION_PATCH)
 
 // checks whether the current version is greater than or equal to the specified version
 #define BSTK_VERSION_SUPPORTED(_Major, _Minor, _Patch) \
