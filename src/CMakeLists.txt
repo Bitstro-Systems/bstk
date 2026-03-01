@@ -31,6 +31,9 @@ set(BSTK_MEMORY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/system_allocator.cpp"
 )
+set(BSTK_MEMORY_IMPL_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/impl/allocator.hpp"
+)
 set(BSTK_RES_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/res/bstk.rc"
 )
@@ -125,11 +128,12 @@ endif()
 source_group("src/core" FILES ${BSTK_CORE_INC_FILES} ${BSTK_CORE_SRC_FILES})
 source_group("src/core/impl" FILES ${BSTK_CORE_IMPL_FILES})
 source_group("src/memory" FILES ${BSTK_MEMORY_INC_FILES} ${BSTK_MEMORY_SRC_FILES})
+source_group("src/memory/impl" FILES ${BSTK_MEMORY_IMPL_FILES})
 source_group("res" FILES ${BSTK_RES_FILES})
 
 # add the BSTK shared library and adjust its properties
 add_library(bstk SHARED ${BSTK_CORE_INC_FILES} ${BSTK_CORE_SRC_FILES} ${BSTK_CORE_IMPL_FILES}
-    ${BSTK_MEMORY_INC_FILES} ${BSTK_MEMORY_SRC_FILES})
+    ${BSTK_MEMORY_INC_FILES} ${BSTK_MEMORY_SRC_FILES} ${BSTK_MEMORY_IMPL_FILES})
 target_compile_definitions(bstk PRIVATE _BSTK_BUILD=1 PUBLIC ${BSTK_DEFS})
 target_compile_features(bstk PRIVATE cxx_std_20)
 target_include_directories(bstk PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

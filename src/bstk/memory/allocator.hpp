@@ -56,6 +56,9 @@ namespace bs {
 
     template <class _Alloc>
     struct is_allocator : public ::std::bool_constant<any_allocator<_Alloc>> {};
+
+    _BSTK_EXPORT allocator& get_allocator() noexcept;
+    _BSTK_EXPORT void set_allocator(allocator& _Al) noexcept;
 } // namespace bs
 
 #endif // _BSTK_MEMORY_ALLOCATOR_HPP_

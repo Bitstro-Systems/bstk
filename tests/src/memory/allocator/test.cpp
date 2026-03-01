@@ -80,4 +80,14 @@ namespace bs {
         EXPECT_TRUE(is_allocator<_Valid_allocator>::value);
         EXPECT_FALSE(is_allocator<_Invalid_allocator>::value);
     }
+
+    TEST(get_allocator, default_allocator) {
+        EXPECT_EQ(::bs::get_allocator().id(), allocator_id::system);
+    }
+
+    TEST(get_allocator, custom_allocator) {
+        _Valid_allocator _Al;
+        ::bs::set_allocator(_Al);
+        EXPECT_EQ(::bs::get_allocator().id(), _Al.id());
+    }
 } // namespace bs
