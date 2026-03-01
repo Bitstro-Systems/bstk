@@ -7,7 +7,7 @@
 #ifndef _BSTK_CORE_IMPL_TINYWIN_HPP_
 #define _BSTK_CORE_IMPL_TINYWIN_HPP_
 
-#ifdef _BS_WINDOWS
+#if _BS_WINDOWS
 #define NOSERVICE
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>

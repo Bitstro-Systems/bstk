@@ -3,7 +3,7 @@
 // Copyright (c) Bitstro Systems. All rights reserved.
 // Licensed under BSDL 1.0
 
-#ifdef _BS_WINDOWS
+#if _BS_WINDOWS
 #include <bstk/core/impl/tinywin.hpp>
 
 // Note: Unlike Linux shared objects (SOs), Windows dynamic-link libraries (DLLs) require
