@@ -7,7 +7,7 @@
 #ifndef _BSTK_CORE_EXPORT_HPP_
 #define _BSTK_CORE_EXPORT_HPP_
 
-#ifdef _BS_WINDOWS
+#if _BS_WINDOWS
 // Windows shared libraries (DLLs) require explicit export/import attributes
 #ifdef _BSTK_BUILD
 #define _BSTK_EXPORT __declspec(dllexport)

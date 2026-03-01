@@ -21,6 +21,7 @@ set(BSTK_CORE_IMPL_FILES
 )
 set(BSTK_MEMORY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/allocator.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/endian.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.hpp"
 )
 set(BSTK_MEMORY_SRC_FILES
@@ -36,9 +37,11 @@ set(BSTK_DEFS)
 
 # detect the platform and set the corresponding definition, terminate if the platform is not supported
 if(WIN32)
+    list(APPEND BSTK_DEFS _BS_LINUX=0)
     list(APPEND BSTK_DEFS _BS_WINDOWS=1)
 elseif(UNIX)
     list(APPEND BSTK_DEFS _BS_LINUX=1)
+    list(APPEND BSTK_DEFS _BS_WINDOWS=0)
 else()
     # unsupported platform, report an error and terminate
     message(FATAL_ERROR "Unsupported platform detected.")
@@ -50,8 +53,10 @@ set(is_msvc FALSE)
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(is_gcc TRUE)
     list(APPEND BSTK_DEFS _BS_GCC=1)
+    list(APPEND BSTK_DEFS _BS_MSVC=0)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(is_msvc TRUE)
+    list(APPEND BSTK_DEFS _BS_GCC=0)
     list(APPEND BSTK_DEFS _BS_MSVC=1)
 else()
     # unsupported compiler, report an error and terminate
@@ -68,7 +73,9 @@ endif()
 # detect the architecture and set the corresponding definition, terminate if the architecture is not supported
 if(${BSTK_PLATFORM_ARCH} STREQUAL "x64")
     list(APPEND BSTK_DEFS _BS_X64=1)
+    list(APPEND BSTK_DEFS _BS_X86=0)
 elseif(${BSTK_PLATFORM_ARCH} STREQUAL "x86")
+    list(APPEND BSTK_DEFS _BS_X64=0)
     list(APPEND BSTK_DEFS _BS_X86=1)
 else()
     # unsupported architecture, report an error and terminate
@@ -77,9 +84,11 @@ endif()
 
 # detect the byte order and set the corresponding definition, terminate if unable to detect the byte order
 if(CMAKE_CXX_BYTE_ORDER STREQUAL "LITTLE_ENDIAN")
+    list(APPEND BSTK_DEFS _BS_BIG_ENDIAN=0)
     list(APPEND BSTK_DEFS _BS_LITTLE_ENDIAN=1)
 elseif(CMAKE_CXX_BYTE_ORDER STREQUAL "BIG_ENDIAN")
     list(APPEND BSTK_DEFS _BS_BIG_ENDIAN=1)
+    list(APPEND BSTK_DEFS _BS_LITTLE_ENDIAN=0)
 else()
     # failed to detect the byte order, report an error and terminate
     message(FATAL_ERROR "Byte order could not be detected.")
