@@ -36,8 +36,10 @@ namespace bs {
 #endif // _BS_BIG_ENDIAN
     };
 
-    // Note:
-    namespace bstk_impl {
+    // Note: The functions below should be placed in an internal header as they are
+    //       part of the implementation details. However, to maintain swap_endian() constexpr,
+    //       these functions must be implemented in a public header and should not be exported.
+    namespace bstk {
         constexpr uint16_t _Bswap16(const uint16_t _Value) noexcept {
 #if _BS_GCC
             return __builtin_bswap16(_Value);
@@ -89,7 +91,7 @@ namespace bs {
 #endif // _BS_GCC
         }
 #endif // _BS_INT128_SUPPORTED
-    } // namespace bstk_impl
+    } // namespace bstk
 
     template <integral _Ty>
     constexpr _Ty swap_endian(const _Ty _Value) noexcept {
@@ -97,15 +99,15 @@ namespace bs {
         if constexpr (sizeof(_Ty) == 1) {
             return _Value;
         } else if constexpr (sizeof(_Ty) == 2) {
-            return static_cast<_Ty>(bstk_impl::_Bswap16(static_cast<uint16_t>(_Value)));
+            return static_cast<_Ty>(bstk::_Bswap16(static_cast<uint16_t>(_Value)));
         } else if constexpr (sizeof(_Ty) == 4) {
-            return static_cast<_Ty>(bstk_impl::_Bswap32(static_cast<uint32_t>(_Value)));
+            return static_cast<_Ty>(bstk::_Bswap32(static_cast<uint32_t>(_Value)));
         } else if constexpr (sizeof(_Ty) == 8) {
-            return static_cast<_Ty>(bstk_impl::_Bswap64(static_cast<uint64_t>(_Value)));
+            return static_cast<_Ty>(bstk::_Bswap64(static_cast<uint64_t>(_Value)));
         }
 #if _BS_INT128_SUPPORTED
         else if constexpr (sizeof(_Ty) == 16) {
-            return static_cast<_Ty>(bstk_impl::_Bswap128(static_cast<uint128_t>(_Value)));
+            return static_cast<_Ty>(bstk::_Bswap128(static_cast<uint128_t>(_Value)));
         }
 #endif // _BS_INT128_SUPPORTED
         else {

@@ -18,15 +18,18 @@ set(BSTK_CORE_SRC_FILES
 set(BSTK_CORE_IMPL_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/impl/dllmain.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/impl/tinywin.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/impl/utility.hpp"
 )
 set(BSTK_MEMORY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/endian.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/system_allocator.hpp"
 )
 set(BSTK_MEMORY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/system_allocator.cpp"
 )
 set(BSTK_RES_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/res/bstk.rc"

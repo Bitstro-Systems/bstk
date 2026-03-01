@@ -13,7 +13,8 @@
 
 namespace bs {
     enum class allocator_id : unsigned char {
-        none = 0
+        none   = 0,
+        system = 1
     };
 
     class _BSTK_EXPORT _BSTK_NOVTABLE allocator { // interface for custom memory allocation
