@@ -7,6 +7,7 @@
 #include <bstk/core/impl/utility.hpp>
 #include <bstk/memory/system_allocator.hpp>
 #include <new>
+#include <utility>
 
 namespace bs {
     allocator_id system_allocator::id() const noexcept {
