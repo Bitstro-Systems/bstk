@@ -37,7 +37,7 @@ namespace bs {
         bool is_equal(const allocator& _Other) const noexcept override;
 
         // allocates uninitialized storage with optional alignment
-        pointer allocate(size_type _Size, size_type _Align = 0) override;
+        [[nodiscard]] pointer allocate(size_type _Size, size_type _Align = 0) override;
 
         // deallocates storage with optional alignment
         void deallocate(pointer _Ptr, size_type _Size, size_type _Align) override;

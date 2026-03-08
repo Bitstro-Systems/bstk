@@ -4,6 +4,7 @@
 // Licensed under BSDL 1.0
 
 #include <bstk/memory/allocator.hpp>
+#include <bstk/memory/system_allocator.hpp>
 #include <gtest/gtest.h>
 
 namespace bs {
@@ -29,7 +30,7 @@ namespace bs {
             return false;
         }
 
-        pointer allocate(size_type, size_type) override {
+        [[nodiscard]] pointer allocate(size_type, size_type) override {
             return nullptr;
         }
 
@@ -64,16 +65,24 @@ namespace bs {
             return false;
         }
 
-        pointer allocate(size_type, size_type) {
+        [[nodiscard]] pointer allocate(size_type, size_type) {
             return nullptr;
         }
 
         void deallocate(pointer, size_type, size_type) {}
     };
 
+    TEST(any_allocator, standard_allocator) {
+        EXPECT_TRUE(any_allocator<system_allocator>);
+    }
+
     TEST(any_allocator, custom_allocator) {
         EXPECT_TRUE(any_allocator<_Valid_allocator>);
         EXPECT_FALSE(any_allocator<_Invalid_allocator>);
+    }
+
+    TEST(is_allocator, standard_allocator) {
+        EXPECT_TRUE(is_allocator<system_allocator>::value);
     }
 
     TEST(is_allocator, custom_allocator) {
