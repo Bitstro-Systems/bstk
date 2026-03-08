@@ -27,6 +27,7 @@ add_isolated_test(test_core_exception "src/core/exception/test.cpp")
 add_isolated_test(test_core_version "src/core/version/test.cpp")
 add_isolated_test(test_memory_allocator "src/memory/allocator/test.cpp")
 add_isolated_test(test_memory_endian "src/memory/endian/test.cpp")
+add_isolated_test(test_memory_object_allocator "src/memory/object_allocator/test.cpp")
 add_isolated_test(test_memory_reference_counter "src/memory/reference_counter/test.cpp")
 add_isolated_test(test_memory_system_allocator "src/memory/system_allocator/test.cpp")
 
@@ -39,6 +40,7 @@ add_custom_target(bstk_and_tests ALL DEPENDS
     test_core_version
     test_memory_allocator
     test_memory_endian
+    test_memory_object_allocator
     test_memory_reference_counter
     test_memory_system_allocator
 )
