@@ -34,7 +34,7 @@ namespace bs {
             return true;
         }
 
-        pointer allocate(size_type _Size, size_type _Align) override {
+        [[nodiscard]] pointer allocate(size_type _Size, size_type _Align) override {
             _Capture_allocation_size(_Size, _Align);
             return nullptr;
         }

@@ -43,7 +43,7 @@ namespace bs {
         virtual bool is_equal(const allocator& _Other) const noexcept = 0;
 
         // allocates uninitialized storage with optional alignment
-        virtual pointer allocate(size_type _Size, size_type _Align = 0) = 0;
+        [[nodiscard]] virtual pointer allocate(size_type _Size, size_type _Align = 0) = 0;
 
         // deallocates storage with optional alignment
         virtual void deallocate(pointer _Ptr, size_type _Size, size_type _Align) = 0;

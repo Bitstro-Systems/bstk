@@ -7,23 +7,25 @@
 #include <gtest/gtest.h>
 
 namespace bs {
-    TEST(system_allocator, allocate_aligned) {
-        constexpr size_t _Count = 1000;
-        constexpr size_t _Align = 64;
+    class system_allocator_test : public ::testing::Test {
+    protected:
         system_allocator _Al;
+    };
+
+    TEST_F(system_allocator_test, allocate_aligned) {
+        constexpr size_t _Count    = 1000;
+        constexpr size_t _Align    = 64;
         void* const _Ptr           = _Al.allocate(_Count, _Align);
         const uintptr_t _Ptr_bytes = reinterpret_cast<uintptr_t>(_Ptr);
         EXPECT_EQ(_Ptr_bytes % _Align, 0); // address should also be aligned
         _Al.deallocate(_Ptr, _Count, _Align);
     }
 
-    TEST(system_allocator, id) {
-        const system_allocator _Al;
+    TEST_F(system_allocator_test, id) {
         EXPECT_EQ(_Al.id(), allocator_id::system);
     }
 
-    TEST(system_allocator, max_size) {
-        const system_allocator _Al;
+    TEST_F(system_allocator_test, max_size) {
 #if _BS_X64
         EXPECT_EQ(_Al.max_size(), 0xFFFF'FFFF'FFFF'FFFF);
 #else // ^^^ _BS_X64 ^^^ / vvv _BS_X86 vvv
@@ -31,10 +33,9 @@ namespace bs {
 #endif // _BS_X64
     }
 
-    TEST(system_allocator, is_equal) {
-        const system_allocator _Al0;
-        const system_allocator _Al1;
-        EXPECT_TRUE(_Al0.is_equal(_Al1));
-        EXPECT_TRUE(_Al1.is_equal(_Al0));
+    TEST_F(system_allocator_test, is_equal) {
+        const system_allocator _Al2;
+        EXPECT_TRUE(_Al.is_equal(_Al2));
+        EXPECT_TRUE(_Al2.is_equal(_Al));
     }
 } // namespace bs

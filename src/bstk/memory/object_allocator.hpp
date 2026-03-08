@@ -62,7 +62,7 @@ namespace bs {
             return ::bs::get_allocator().is_equal(_Other);
         }
 
-        pointer allocate(const size_type _Count, const size_type _Align = 0) {
+        [[nodiscard]] pointer allocate(const size_type _Count, const size_type _Align = 0) {
             return static_cast<pointer>(
                 ::bs::get_allocator().allocate(_Count * sizeof(_Ty), _Choose_align(_Align)));
         }
