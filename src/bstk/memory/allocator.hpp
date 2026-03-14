@@ -46,7 +46,7 @@ namespace bs {
         [[nodiscard]] virtual pointer allocate(size_type _Size, size_type _Align = 0) = 0;
 
         // deallocates storage with optional alignment
-        virtual void deallocate(pointer _Ptr, size_type _Size, size_type _Align) = 0;
+        virtual void deallocate(pointer _Ptr, size_type _Size, size_type _Align = 0) = 0;
     };
 
     _BSTK_EXPORT bool operator==(const allocator& _Left, const allocator& _Right) noexcept;
