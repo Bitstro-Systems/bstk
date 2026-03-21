@@ -3,6 +3,7 @@
 // Copyright (c) Bitstro Systems. All rights reserved.
 // Licensed under BSDL 1.0
 
+#include <algorithm>
 #include <bstk/core/exception.hpp>
 #include <bstk/memory/impl/address.hpp>
 #include <bstk/memory/memory_block_view.hpp>
