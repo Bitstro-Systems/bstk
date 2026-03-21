@@ -4,7 +4,7 @@
 // Licensed under BSDL 1.0
 
 #include <bstk/memory/allocator.hpp>
-#include <bstk/memory/impl/allocator.hpp>
+#include <bstk/memory/impl/runtime_allocator.hpp>
 
 namespace bs {
     bool operator==(const allocator& _Left, const allocator& _Right) noexcept {
