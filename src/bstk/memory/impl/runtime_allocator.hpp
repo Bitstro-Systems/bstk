@@ -1,11 +1,11 @@
-// allocator.hpp
+// runtime_allocator.hpp
 
 // Copyright (c) Bitstro Systems. All rights reserved.
 // Licensed under BSDL 1.0
 
 #pragma once
-#ifndef _BSTK_MEMORY_IMPL_ALLOCATOR_HPP_
-#define _BSTK_MEMORY_IMPL_ALLOCATOR_HPP_
+#ifndef _BSTK_MEMORY_IMPL_RUNTIME_ALLOCATOR_HPP_
+#define _BSTK_MEMORY_IMPL_RUNTIME_ALLOCATOR_HPP_
 #include <atomic>
 #include <bstk/memory/allocator.hpp>
 #include <bstk/memory/system_allocator.hpp>
@@ -41,4 +41,4 @@ namespace bs {
     } // namespace bstk
 } // namespace bs
 
-#endif // _BSTK_MEMORY_IMPL_ALLOCATOR_HPP_
+#endif // _BSTK_MEMORY_IMPL_RUNTIME_ALLOCATOR_HPP_
