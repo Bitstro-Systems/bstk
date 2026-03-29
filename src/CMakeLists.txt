@@ -23,6 +23,7 @@ set(BSTK_CORE_IMPL_FILES
 set(BSTK_MEMORY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/endian.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/memory_block.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/memory_block_view.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/object.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/object_allocator.hpp"
@@ -31,6 +32,7 @@ set(BSTK_MEMORY_INC_FILES
 )
 set(BSTK_MEMORY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/allocator.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/memory_block.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/memory_block_view.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/system_allocator.cpp"

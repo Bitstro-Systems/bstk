@@ -36,7 +36,7 @@ namespace bs {
     }
 
     memory_block_view::const_pointer memory_block_view::end() const noexcept {
-        return bstk::_Adjust_address_by_offset(_Myptr, _Mysize);
+        return _Myptr ? bstk::_Adjust_address_by_offset(_Myptr, _Mysize) : nullptr;
     }
 
     memory_block_view::size_type memory_block_view::size() const noexcept {

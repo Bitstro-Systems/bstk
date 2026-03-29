@@ -38,6 +38,13 @@ namespace bs {
             static_assert(::std::is_unsigned_v<_Integer>, "integer must be unsigned");
             return (_Value & (_Value - 1)) == 0;
         }
+
+        template <class _Integer>
+        constexpr bool _Is_pow_of_2(const _Integer _Value) noexcept {
+            // check if the given value is a power of 2 (only one bit is set)
+            static_assert(::std::is_unsigned_v<_Integer>, "integer must be unsigned");
+            return (_Value ^ (_Value - 1)) > _Value - 1;
+        }
     } // namespace bstk
 } // namespace bs
 
