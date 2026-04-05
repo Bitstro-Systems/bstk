@@ -7,6 +7,7 @@
 #ifndef _BSTK_MEMORY_IMPL_ADDRESS_HPP_
 #define _BSTK_MEMORY_IMPL_ADDRESS_HPP_
 #include <bstk/memory/endian.hpp>
+#include <cstddef>
 #include <type_traits>
 
 namespace bs {
