@@ -3,14 +3,11 @@
 // Copyright (c) Bitstro Systems. All rights reserved.
 // Licensed under BSDL 1.0
 
+#include <bstk/core/impl/utility.hpp>
 #include <bstk/memory/object_allocator.hpp>
 #include <gtest/gtest.h>
 
 namespace bs {
-    constexpr size_t _Align_up(const size_t _Value, const size_t _Align) noexcept {
-        return (_Value + _Align - 1) & ~(_Align - 1);
-    }
-
     class _Tracking_allocator : public allocator {
     public:
         _Tracking_allocator(size_type& _Size, size_type& _Align) noexcept
@@ -45,7 +42,7 @@ namespace bs {
 
     private:
         void _Capture_allocation_size(const size_type _Size, const size_type _Align) noexcept {
-            _Mysize  = _Align_up(_Size, _Align);
+            _Mysize  = bstk::_Align_up_pow_of_2(_Size, _Align);
             _Myalign = _Align;
         }
 
@@ -100,7 +97,7 @@ namespace bs {
     TEST_F(object_allocator_test, allocate_custom_alignment) {
         constexpr size_t _Count         = 7;
         constexpr size_t _Align         = 128;
-        constexpr size_t _Expected_size = _Align_up(_Count * sizeof(_Value_type), _Align);
+        constexpr size_t _Expected_size = bstk::_Align_up_pow_of_2(_Count * sizeof(_Value_type), _Align);
         (void) _Al.allocate(_Count, _Align);
         EXPECT_EQ(_Captured_size, _Expected_size);
         EXPECT_EQ(_Captured_align, _Align);
@@ -117,7 +114,7 @@ namespace bs {
     TEST_F(object_allocator_test, deallocate_custom_alignment) {
         constexpr size_t _Count         = 21;
         constexpr size_t _Align         = 256;
-        constexpr size_t _Expected_size = _Align_up(_Count * sizeof(_Value_type), _Align);
+        constexpr size_t _Expected_size = bstk::_Align_up_pow_of_2(_Count * sizeof(_Value_type), _Align);
         _Al.deallocate(nullptr, _Count, _Align);
         EXPECT_EQ(_Captured_size, _Expected_size);
         EXPECT_EQ(_Captured_align, _Align);

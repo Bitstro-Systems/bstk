@@ -9,6 +9,27 @@
 namespace bs {
     enum class _Test_enum : uint8_t {};
 
+    void _Test_bitor_assign(
+        const _Test_enum _Mask, const _Test_enum _Value, const _Test_enum _Expected) {
+        _Test_enum _Mask_ref = _Mask;
+        _Mask_ref           |= _Value;
+        EXPECT_EQ(_Mask_ref, _Expected);
+    }
+
+    void _Test_bitand_assign(
+        const _Test_enum _Mask, const _Test_enum _Value, const _Test_enum _Expected) {
+        _Test_enum _Mask_ref = _Mask;
+        _Mask_ref           &= _Value;
+        EXPECT_EQ(_Mask_ref, _Expected);
+    }
+
+    void _Test_bitxor_assign(
+        const _Test_enum _Mask, const _Test_enum _Value, const _Test_enum _Expected) {
+        _Test_enum _Mask_ref = _Mask;
+        _Mask_ref           ^= _Value;
+        EXPECT_EQ(_Mask_ref, _Expected);
+    }
+
     TEST(bitmask, enumeration) {
         EXPECT_FALSE(enumeration<uint8_t>);
         EXPECT_TRUE(enumeration<_Test_enum>);
@@ -47,27 +68,6 @@ namespace bs {
         EXPECT_EQ(~_Test_enum{0b1010'1010}, _Test_enum{0b0101'0101});
         EXPECT_EQ(~_Test_enum{0b0011'1110}, _Test_enum{0b1100'0001});
         EXPECT_EQ(~_Test_enum{0b1111'1111}, _Test_enum{0b0000'0000});
-    }
-
-    void _Test_bitor_assign(
-        const _Test_enum _Mask, const _Test_enum _Value, const _Test_enum _Expected) {
-        _Test_enum _Mask_ref = _Mask;
-        _Mask_ref           |= _Value;
-        EXPECT_EQ(_Mask_ref, _Expected);
-    }
-
-    void _Test_bitand_assign(
-        const _Test_enum _Mask, const _Test_enum _Value, const _Test_enum _Expected) {
-        _Test_enum _Mask_ref = _Mask;
-        _Mask_ref           &= _Value;
-        EXPECT_EQ(_Mask_ref, _Expected);
-    }
-
-    void _Test_bitxor_assign(
-        const _Test_enum _Mask, const _Test_enum _Value, const _Test_enum _Expected) {
-        _Test_enum _Mask_ref = _Mask;
-        _Mask_ref           ^= _Value;
-        EXPECT_EQ(_Mask_ref, _Expected);
     }
 
     TEST(bitmask, operator_bitor_assign) {

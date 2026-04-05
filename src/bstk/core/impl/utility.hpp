@@ -45,6 +45,13 @@ namespace bs {
             static_assert(::std::is_unsigned_v<_Integer>, "integer must be unsigned");
             return (_Value ^ (_Value - 1)) > _Value - 1;
         }
+
+        template <class _Integer>
+        constexpr _Integer _Align_up_pow_of_2(const _Integer _Value, const _Integer _Align) noexcept {
+            // align the given value to the nearest multiple of the given alignment
+            static_assert(::std::is_unsigned_v<_Integer>, "integer must be unsigned");
+            return (_Value + _Align - 1) & ~(_Align - 1);
+        }
     } // namespace bstk
 } // namespace bs
 

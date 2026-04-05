@@ -41,6 +41,16 @@ namespace bs {
 
         // deallocates storage with optional alignment
         void deallocate(pointer _Ptr, size_type _Size, size_type _Align = 0) override;
+
+    private:
+#ifdef _DEBUG
+        // allocates unintialized storage with optional alignment for debug mode
+        static pointer _Allocate_debug(const size_type _Size, const size_type _Align) noexcept;
+
+        // deallocates storage with optional alignment for debug mode
+        static void _Deallocate_debug(
+            pointer _Ptr, const size_type _Size, const size_type _Align) noexcept;
+#endif // _DEBUG
     };
 } // namespace bs
 
