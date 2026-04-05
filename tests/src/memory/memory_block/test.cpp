@@ -10,6 +10,21 @@
 #include <gtest/gtest.h>
 
 namespace bs {
+    void _Test_contains_ptr(const memory_block& _Block, const intptr_t _Off, const bool _Contains) {
+        EXPECT_EQ(_Block.contains(bstk::_Adjust_address_by_offset(_Block.begin(), _Off)), _Contains);
+    }
+
+    void _Test_contains_block(const memory_block& _Block,
+        const intptr_t _Off, const size_t _Size, const bool _Contains) {
+        EXPECT_EQ(_Block.contains(memory_block_view{
+            bstk::_Adjust_address_by_offset(_Block.begin(), _Off), _Size}), _Contains);
+    }
+
+    void _Test_block_valid_bounds(const memory_block& _Block,
+        const size_t _Off, const size_t _Size, const size_t _Expected_size) {
+        EXPECT_EQ(_Block.block(_Off, _Size).size(), _Expected_size);
+    }
+
     TEST(memory_block, default_construct) {
         const memory_block _Block;
         EXPECT_EQ(_Block.get_allocator(), ::bs::get_allocator());
@@ -235,10 +250,6 @@ namespace bs {
         EXPECT_EQ(_Block.alignment(), _Align);
     }
 
-    void _Test_contains_ptr(const memory_block& _Block, const intptr_t _Off, const bool _Contains) {
-        EXPECT_EQ(_Block.contains(bstk::_Adjust_address_by_offset(_Block.begin(), _Off)), _Contains);
-    }
-
     TEST(memory_block, contains_ptr) {
         const memory_block _Block(1024, 64);
         _Test_contains_ptr(_Block, -1, false);
@@ -249,12 +260,6 @@ namespace bs {
         _Test_contains_ptr(_Block, 1023, true);
     }
 
-    void _Test_contains_block(const memory_block& _Block,
-        const intptr_t _Off, const size_t _Size, const bool _Contains) {
-        EXPECT_EQ(_Block.contains(memory_block_view{
-            bstk::_Adjust_address_by_offset(_Block.begin(), _Off), _Size}), _Contains);
-    }
-
     TEST(memory_block, contains_block) {
         const memory_block _Block(1024, 64);
         _Test_contains_block(_Block, -512, 256, false);
@@ -263,11 +268,6 @@ namespace bs {
         _Test_contains_block(_Block, 0, 128, true);
         _Test_contains_block(_Block, 512, 64, true);
         _Test_contains_block(_Block, 0, 1024, true);
-    }
-
-    void _Test_block_valid_bounds(const memory_block& _Block,
-        const size_t _Off, const size_t _Size, const size_t _Expected_size) {
-        EXPECT_EQ(_Block.block(_Off, _Size).size(), _Expected_size);
     }
 
     TEST(memory_block, block_valid_bounds) {

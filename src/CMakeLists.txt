@@ -39,6 +39,7 @@ set(BSTK_MEMORY_SRC_FILES
 )
 set(BSTK_MEMORY_IMPL_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/impl/address.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/impl/debug_block.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/impl/runtime_allocator.hpp"
 )
 set(BSTK_RES_FILES

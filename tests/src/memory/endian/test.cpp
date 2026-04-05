@@ -13,6 +13,30 @@
 #endif // _BS_INT128_SUPPORTED
 
 namespace bs {
+    template <integral _Ty>
+    void _Test_to_endian(const _Ty _Value) noexcept {
+        const _Ty _Swapped = ::bs::swap_endian(_Value);
+#if _BS_BIG_ENDIAN
+        EXPECT_EQ(::bs::to_big_endian(_Value), _Value);
+        EXPECT_EQ(::bs::to_little_endian(_Value), _Swapped);
+#else // ^^^ _BS_BIG_ENDIAN ^^^ / vvv _BS_LITTLE_ENDIAN vvv
+        EXPECT_EQ(::bs::to_big_endian(_Value), _Swapped);
+        EXPECT_EQ(::bs::to_little_endian(_Value), _Value);
+#endif // _BS_BIG_ENDIAN
+    }
+
+    template <integral _Ty>
+    void _Test_from_endian(const _Ty _Value) noexcept {
+        const _Ty _Swapped = ::bs::swap_endian(_Value);
+#if _BS_BIG_ENDIAN
+        EXPECT_EQ(::bs::from_big_endian(_Value), _Value);
+        EXPECT_EQ(::bs::from_little_endian(_Value), _Swapped);
+#else // ^^^ _BS_BIG_ENDIAN ^^^ / vvv _BS_LITTLE_ENDIAN vvv
+        EXPECT_EQ(::bs::from_big_endian(_Value), _Swapped);
+        EXPECT_EQ(::bs::from_little_endian(_Value), _Value);
+#endif // _BS_BIG_ENDIAN
+    }
+
     TEST(endian, native) {
 #if _BS_BIG_ENDIAN
         EXPECT_EQ(endian::native, endian::big);
@@ -59,30 +83,6 @@ namespace bs {
             _MAKE_UINT128(0x6677'8899'AABB'DDCC, 0xCCBB'AA99'8877'6655));
     }
 #endif // _BS_INT128_SUPPORTED
-
-    template <integral _Ty>
-    void _Test_to_endian(const _Ty _Value) noexcept {
-        const _Ty _Swapped = ::bs::swap_endian(_Value);
-#if _BS_BIG_ENDIAN
-        EXPECT_EQ(::bs::to_big_endian(_Value), _Value);
-        EXPECT_EQ(::bs::to_little_endian(_Value), _Swapped);
-#else // ^^^ _BS_BIG_ENDIAN ^^^ / vvv _BS_LITTLE_ENDIAN vvv
-        EXPECT_EQ(::bs::to_big_endian(_Value), _Swapped);
-        EXPECT_EQ(::bs::to_little_endian(_Value), _Value);
-#endif // _BS_BIG_ENDIAN
-    }
-
-    template <integral _Ty>
-    void _Test_from_endian(const _Ty _Value) noexcept {
-        const _Ty _Swapped = ::bs::swap_endian(_Value);
-#if _BS_BIG_ENDIAN
-        EXPECT_EQ(::bs::from_big_endian(_Value), _Value);
-        EXPECT_EQ(::bs::from_little_endian(_Value), _Swapped);
-#else // ^^^ _BS_BIG_ENDIAN ^^^ / vvv _BS_LITTLE_ENDIAN vvv
-        EXPECT_EQ(::bs::from_big_endian(_Value), _Swapped);
-        EXPECT_EQ(::bs::from_little_endian(_Value), _Value);
-#endif // _BS_BIG_ENDIAN
-    }
 
     TEST(endian, to_endian) {
         _Test_to_endian(uint16_t{0x1A2B});
