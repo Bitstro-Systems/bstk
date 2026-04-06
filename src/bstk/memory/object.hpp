@@ -136,13 +136,13 @@ namespace bs {
 
         _Ty* const _Array = ::bs::allocate_object_array_using_allocator<_Ty>(_Count, _Al);
         bstk::_Deallocate_object_array_guard _Guard{_Array, _Count, _Al};
-        size_t _Idx = 0;
+        size_t _Off = 0;
         try {
-            for (; _Idx < _Count; ++_Idx) {
-                ::bs::construct_object(_Array + _Idx);
+            for (; _Off < _Count; ++_Off) {
+                ::bs::construct_object(_Array + _Off);
             }
         } catch (...) {
-            bstk::_Destroy_object_array(_Array, _Idx);
+            bstk::_Destroy_object_array(_Array, _Off);
             
             // Note: _Destroy_object_array() calls std::terminate() if any destructor throws.
             //       If control returns, all constructed objects have been destroyed successfully.
