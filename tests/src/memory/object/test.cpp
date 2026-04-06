@@ -26,9 +26,13 @@ namespace bs {
     };
 
     struct _Aggregate_object {
-        bool _Flag;
-        char _Sign;
-        int _Number;
+        static constexpr bool _Default_flag  = false;
+        static constexpr char _Default_sign  = 'z';
+        static constexpr int _Default_number = 92;
+
+        bool _Flag  = _Default_flag;
+        char _Sign  = _Default_sign;
+        int _Number = _Default_number;
     };
 
     TEST(object, construct_and_destruct_object) {
@@ -50,5 +54,17 @@ namespace bs {
         EXPECT_EQ(_Obj->_Sign, _Sign);
         EXPECT_EQ(_Obj->_Number, _Number);
         ::bs::delete_object(_Obj);
+    }
+
+    TEST(object, create_and_delete_object_array) {
+        constexpr size_t _Count         = 16;
+        _Aggregate_object* const _Array = ::bs::create_object_array<_Aggregate_object>(_Count);
+        for (size_t _Idx = 0; _Idx < _Count; ++_Idx) {
+            EXPECT_EQ(_Array[_Idx]._Flag, _Aggregate_object::_Default_flag);
+            EXPECT_EQ(_Array[_Idx]._Sign, _Aggregate_object::_Default_sign);
+            EXPECT_EQ(_Array[_Idx]._Number, _Aggregate_object::_Default_number);
+        }
+
+        ::bs::delete_object_array(_Array, _Count);
     }
 } // namespace bs

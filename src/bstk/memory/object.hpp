@@ -69,6 +69,40 @@ namespace bs {
                 _Obj = nullptr;
             }
         };
+
+        template <class _Ty, class _Alloc>
+        struct _Deallocate_object_array_guard { // deallocates an array of objects on scope exit
+            _Ty* _Array;
+            size_t _Count;
+            _Alloc& _Al;
+
+            ~_Deallocate_object_array_guard() {
+                if (_Array && _Count > 0) {
+                    ::bs::deallocate_object_array_using_allocator(_Array, _Count, _Al);
+                }
+            }
+
+            void _Release() noexcept {
+                _Array = nullptr;
+                _Count = 0;
+            }
+        };
+
+        template <class _Ty>
+        void _Destroy_object_array(_Ty* const _Array, size_t _Count) {
+            while (_Count-- > 0) {
+                try {
+                    ::bs::destroy_object(_Array + _Count);
+                } catch (...) {
+                    // Note: Destructors are implicitly noexcept(true) by default. If such
+                    //       a destructor throws, std::terminate() is invoked immediately
+                    //       and this catch block is never reached. This catch block only
+                    //       handles destructors explicitly declared noexcept(false). In that case,
+                    //       we still treat throwing as a fatal error and call std::terminate().
+                    ::std::terminate();
+                }
+            }
+        }
     } // namespace bstk
 
     template <class _Ty, any_allocator _Alloc, class... _Types>
@@ -88,6 +122,44 @@ namespace bs {
         if (_Obj) {
             bstk::_Deallocate_object_guard _Guard{_Obj, _Al};
             ::bs::destroy_object(_Obj);
+        }
+    }
+
+    template <class _Ty, any_allocator _Alloc>
+    [[nodiscard]] _Ty* create_object_array_using_allocator(const size_t _Count, _Alloc& _Al) {
+        // allocate memory for an array of objects using the given allocator,
+        // then construct the objects in-place
+        if (_Count == 0) {
+            return nullptr;
+        }
+
+        _Ty* const _Array = ::bs::allocate_object_array_using_allocator<_Ty>(_Count, _Al);
+        bstk::_Deallocate_object_array_guard _Guard{_Array, _Count, _Al};
+        size_t _Idx = 0;
+        try {
+            for (; _Idx < _Count; ++_Idx) {
+                ::bs::construct_object(_Array + _Idx);
+            }
+        } catch (...) {
+            bstk::_Destroy_object_array(_Array, _Idx);
+            
+            // Note: _Destroy_object_array() calls std::terminate() if any destructor throws.
+            //       If control returns, all constructed objects have been destroyed successfully.
+            //       In that case, it is safe to rethrow the original exception from construction.
+            throw;
+        }
+
+        _Guard._Release();
+        return _Array;
+    }
+
+    template <class _Ty, any_allocator _Alloc>
+    void delete_object_array_using_allocator(_Ty* const _Array, size_t _Count, _Alloc& _Al) {
+        // destroy the object (if it has a non-trivial destructor)
+        // and deallocate its memory using the given allocator
+        if (_Array && _Count > 0) {
+            bstk::_Deallocate_object_array_guard _Guard{_Array, _Count, _Al};
+            bstk::_Destroy_object_array(_Array, _Count);
         }
     }
 
@@ -127,6 +199,20 @@ namespace bs {
         // destroy the object (if it has a non-trivial destructor)
         // and deallocate its memory using the runtime allocator
         ::bs::delete_object_using_allocator(_Obj, ::bs::get_allocator());
+    }
+
+    template <class _Ty>
+    [[nodiscard]] _Ty* create_object_array(const size_t _Count) {
+        // allocate memory for an array of objects using the runtime allocator,
+        // then construct the objects in-place
+        return ::bs::create_object_array_using_allocator<_Ty>(_Count, ::bs::get_allocator());
+    }
+
+    template <class _Ty>
+    void delete_object_array(_Ty* const _Array, const size_t _Count) {
+        // destroy the object (if it has a non-trivial destructor)
+        // and deallocate its memory using the runtime allocator
+        ::bs::delete_object_array_using_allocator(_Array, _Count, ::bs::get_allocator());
     }
 } // namespace bs
 
