@@ -7,6 +7,7 @@
 #ifndef _BSTK_MEMORY_OBJECT_HPP_
 #define _BSTK_MEMORY_OBJECT_HPP_
 #include <bstk/memory/allocator.hpp>
+#include <exception>
 #include <new>
 #include <type_traits>
 #include <utility>
