@@ -23,6 +23,7 @@ function(add_isolated_test test_name test_path)
 endfunction()
 
 add_isolated_test(test_core_bitmask "src/core/bitmask/test.cpp")
+add_isolated_test(test_core_compressed_pair "src/core/compressed_pair/test.cpp")
 add_isolated_test(test_core_exception "src/core/exception/test.cpp")
 add_isolated_test(test_core_version "src/core/version/test.cpp")
 add_isolated_test(test_memory_allocator "src/memory/allocator/test.cpp")
@@ -40,6 +41,7 @@ add_isolated_test(test_memory_system_allocator "src/memory/system_allocator/test
 add_custom_target(bstk_and_tests ALL DEPENDS
     bstk
     test_core_bitmask
+    test_core_compressed_pair
     test_core_exception
     test_core_version
     test_memory_allocator

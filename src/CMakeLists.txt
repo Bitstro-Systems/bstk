@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.30.0)
 
 set(BSTK_CORE_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/bitmask.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/compressed_pair.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/exception.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/export.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/utility.hpp"
