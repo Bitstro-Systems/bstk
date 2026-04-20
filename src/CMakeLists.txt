@@ -29,6 +29,7 @@ set(BSTK_MEMORY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/object.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/object_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/smart_pointer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/system_allocator.hpp"
 )
 set(BSTK_MEMORY_SRC_FILES
