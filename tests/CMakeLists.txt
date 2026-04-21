@@ -35,6 +35,7 @@ add_isolated_test(test_memory_object "src/memory/object/test.cpp")
 add_isolated_test(test_memory_object_allocator "src/memory/object_allocator/test.cpp")
 add_isolated_test(test_memory_reference_counter "src/memory/reference_counter/test.cpp")
 add_isolated_test(test_memory_system_allocator "src/memory/system_allocator/test.cpp")
+add_isolated_test(test_memory_unique_array "src/memory/unique_array/test.cpp")
 add_isolated_test(test_memory_unique_ptr "src/memory/unique_ptr/test.cpp")
 
 # use a custom target to combine all targets into a single one,
@@ -54,6 +55,7 @@ add_custom_target(bstk_and_tests ALL DEPENDS
     test_memory_object_allocator
     test_memory_reference_counter
     test_memory_system_allocator
+    test_memory_unique_array
     test_memory_unique_ptr
 )
 add_custom_command(TARGET bstk_and_tests POST_BUILD
