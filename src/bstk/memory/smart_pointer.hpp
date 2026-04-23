@@ -9,6 +9,7 @@
 #include <bstk/core/compressed_pair.hpp>
 #include <bstk/core/exception.hpp>
 #include <bstk/memory/object.hpp>
+#include <bstk/memory/reference_counter.hpp>
 #include <compare>
 #include <type_traits>
 #include <utility>
@@ -130,8 +131,7 @@ namespace bs {
     };
 
     template <class _Ty, class _Deleter>
-    bool operator==(
-        const unique_ptr<_Ty, _Deleter>& _Left, const unique_ptr<_Ty, _Deleter>& _Right) noexcept {
+    bool operator==(const unique_ptr<_Ty, _Deleter>& _Left, const unique_ptr<_Ty, _Deleter>& _Right) noexcept {
         return _Left.get() == _Right.get();
     }
 
@@ -149,13 +149,13 @@ namespace bs {
     template <class _Ty, class... _Types>
     unique_ptr<_Ty> make_unique(_Types&&... _Args) {
         // create a unique pointer that manages a newly created object
-        return unique_ptr<_Ty>(::bs::create_object<_Ty>(::std::forward<_Types>(_Args)...));
+        return unique_ptr<_Ty>{::bs::create_object<_Ty>(::std::forward<_Types>(_Args)...)};
     }
 
     template <class _Ty>
     unique_ptr<_Ty> make_unique_for_overwrite() {
         // create a unique pointer that manages a newly default-initialized object
-        return unique_ptr<_Ty>(::bs::create_object<_Ty>());
+        return unique_ptr<_Ty>{::bs::create_object<_Ty>()};
     }
 
     template <class _Ty, class _Deleter = default_delete<_Ty>>
@@ -268,8 +268,7 @@ namespace bs {
     };
 
     template <class _Ty, class _Deleter>
-    bool operator==(
-        const unique_array<_Ty, _Deleter>& _Left, const unique_array<_Ty, _Deleter>& _Right) noexcept {
+    bool operator==(const unique_array<_Ty, _Deleter>& _Left, const unique_array<_Ty, _Deleter>& _Right) noexcept {
         return _Left.get() == _Right.get() && _Left.size() == _Right.size();
     }
 
@@ -279,8 +278,8 @@ namespace bs {
     }
 
     template <class _Ty, class _Deleter>
-    ::std::strong_ordering operator<=>(const unique_array<_Ty, _Deleter>& _Left,
-        const unique_array<_Ty, _Deleter>& _Right) noexcept {
+    ::std::strong_ordering operator<=>(
+        const unique_array<_Ty, _Deleter>& _Left, const unique_array<_Ty, _Deleter>& _Right) noexcept {
         const auto _Result = _Left.get() <=> _Right.get();
         if (_Result != ::std::strong_ordering::equal) { // different pointers, break
             return _Result;
@@ -293,7 +292,155 @@ namespace bs {
     template <class _Ty>
     unique_array<_Ty> make_unique_array(const size_t _Size) {
         // create a unique array that manages a newly created object array
-        return unique_array<_Ty>({::bs::create_object_array<_Ty>(_Size), _Size});
+        return unique_array<_Ty>{{::bs::create_object_array<_Ty>(_Size), _Size}};
+    }
+
+    template <class _Ty, class _Deleter = default_delete<_Ty>>
+    class shared_ptr { // smart pointer with shared object ownership semantics
+    public:
+        static_assert(bstk::_Smart_ptr_element<_Ty>, "invalid element type for shared_ptr<_Ty>");
+
+        using element_type = _Ty;
+        using pointer      = _Ty*;
+        using deleter_type = _Deleter;
+
+        shared_ptr() noexcept : _Mypair(), _Myctr(nullptr) {}
+
+        shared_ptr(::std::nullptr_t) noexcept : _Mypair(), _Myctr(nullptr) {}
+
+        explicit shared_ptr(pointer _Ptr)
+            : _Mypair(_Ptr, _Deleter{}), _Myctr(::bs::create_object<reference_counter>(1)) {}
+
+        shared_ptr(pointer _Ptr, _Deleter _Del)
+            : _Mypair(_Ptr, ::std::move(_Del)), _Myctr(::bs::create_object<reference_counter>(1)) {}
+
+        shared_ptr(::std::nullptr_t, _Deleter _Del) noexcept
+            : _Mypair(nullptr, ::std::move(_Del)), _Myctr(nullptr) {}
+
+        shared_ptr(const shared_ptr& _Other) noexcept
+            : _Mypair(_Other._Mypair), _Myctr(_Other._Myctr) {
+            if (_Myctr) {
+                _Myctr->increment();
+            }
+        }
+
+        shared_ptr(shared_ptr&& _Other) noexcept
+            : _Mypair(::std::move(_Other._Mypair)), _Myctr(_Other._Myctr) {
+            _Other._Mypair.first() = nullptr;
+            _Other._Myctr          = nullptr;
+        }
+
+        shared_ptr(unique_ptr<_Ty, _Deleter>&& _Unique)
+            : _Mypair(_Unique.release(), ::std::move(_Unique.get_deleter())),
+            _Myctr(::bs::create_object<reference_counter>(1)) {}
+
+        ~shared_ptr() noexcept {
+            _Release();
+        }
+
+        shared_ptr& operator=(const shared_ptr& _Other) noexcept {
+            shared_ptr(_Other).swap(*this);
+            return *this;
+        }
+
+        shared_ptr& operator=(shared_ptr&& _Other) noexcept {
+            shared_ptr(::std::move(_Other)).swap(*this);
+            return *this;
+        }
+
+        shared_ptr& operator=(unique_ptr<_Ty, _Deleter>&& _Unique) {
+            shared_ptr(::std::move(_Unique)).swap(*this);
+            return *this;
+        }
+
+        explicit operator bool() const noexcept {
+            return _Mypair.first() != nullptr;
+        }
+
+        element_type& operator*() const noexcept {
+            // the behavior is undefined if the stored pointer is null
+            return *_Mypair.first();
+        }
+
+        pointer operator->() const noexcept {
+            return _Mypair.first();
+        }
+
+        pointer get() const noexcept {
+            return _Mypair.first();
+        }
+
+        deleter_type& get_deleter() noexcept {
+            return _Mypair.second();
+        }
+
+        const deleter_type& get_deleter() const noexcept {
+            return _Mypair.second();
+        }
+
+        long use_count() const noexcept {
+            return _Myctr ? _Myctr->use_count() : 0;
+        }
+
+        void reset() {
+            shared_ptr().swap(*this);
+        }
+
+        void reset(pointer _New_ptr) {
+            shared_ptr(_New_ptr).swap(*this);
+        }
+
+        void reset(pointer _New_ptr, _Deleter _New_del) {
+            shared_ptr(_New_ptr, _New_del).swap(*this);
+        }
+
+        void swap(shared_ptr& _Other) noexcept {
+            _Mypair.swap(_Other._Mypair);
+            ::std::swap(_Myctr, _Other._Myctr);
+        }
+
+    private:
+        void _Release() {
+            // decrement the reference counter and destroy the resource if this is the last reference
+            if (_Myctr && _Myctr->decrement() == 0) {
+                pointer& _Ptr = _Mypair.first();
+                _Mypair.second()(_Ptr); // destroys _Ptr
+                ::bs::delete_object(_Myctr);
+                _Ptr   = nullptr;
+                _Myctr = nullptr;
+            }
+        }
+
+        compressed_pair<pointer, _Deleter> _Mypair;
+        reference_counter* _Myctr;
+    };
+
+    template <class _Ty, class _Deleter>
+    bool operator==(const shared_ptr<_Ty, _Deleter>& _Left, const shared_ptr<_Ty, _Deleter>& _Right) noexcept {
+        return _Left.get() == _Right.get();
+    }
+
+    template <class _Ty, class _Deleter>
+    bool operator==(const shared_ptr<_Ty, _Deleter>& _Left, ::std::nullptr_t) noexcept {
+        return _Left.get() == nullptr;
+    }
+
+    template <class _Ty, class _Deleter>
+    ::std::strong_ordering operator<=>(
+        const shared_ptr<_Ty, _Deleter>& _Left, const shared_ptr<_Ty, _Deleter>& _Right) noexcept {
+        return _Left.get() <=> _Right.get();
+    }
+
+    template <class _Ty, class... _Types>
+    shared_ptr<_Ty> make_shared(_Types&&... _Args) {
+        // create a shared pointer that manages a newly created object
+        return shared_ptr<_Ty>{::bs::create_object<_Ty>(::std::forward<_Types>(_Args)...)};
+    }
+
+    template <class _Ty>
+    shared_ptr<_Ty> make_shared_for_overwrite() {
+        // create a shared pointer that manages a newly default-initialized object
+        return shared_ptr<_Ty>{::bs::create_object<_Ty>()};
     }
 } // namespace bs
 
