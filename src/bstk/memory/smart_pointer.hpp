@@ -442,6 +442,166 @@ namespace bs {
         // create a shared pointer that manages a newly default-initialized object
         return shared_ptr<_Ty>{::bs::create_object<_Ty>()};
     }
+
+    template <class _Ty, class _Deleter = default_delete<_Ty>>
+    class shared_array { // smart pointer with shared object ownership semantics for arrays
+    public:
+        static_assert(bstk::_Smart_ptr_element<_Ty>, "invalid element type for shared_array<_Ty>");
+
+        using element_type = _Ty;
+        using pointer      = _Ty*;
+        using deleter_type = _Deleter;
+
+        struct array_type {
+            pointer ptr = nullptr;
+            size_t size = 0;
+        };
+
+        shared_array() noexcept : _Mypair(), _Myctr(nullptr) {}
+
+        explicit shared_array(const array_type _Array)
+            : _Mypair(_Array, _Deleter{}), _Myctr(::bs::create_object<reference_counter>(1)) {}
+
+        shared_array(const array_type _Array, _Deleter _Del)
+            : _Mypair(_Array, ::std::move(_Del)), _Myctr(::bs::create_object<reference_counter>(1)) {}
+
+        shared_array(const shared_array& _Other) noexcept
+            : _Mypair(_Other._Mypair), _Myctr(_Other._Myctr) {
+            if (_Myctr) {
+                _Myctr->increment();
+            }
+        }
+
+        shared_array(shared_array&& _Other) noexcept
+            : _Mypair(::std::move(_Other._Mypair)), _Myctr(_Other._Myctr) {
+            array_type& _Array = _Other._Mypair.first();
+            _Array.ptr         = nullptr;
+            _Array.size        = 0;
+            _Other._Myctr      = nullptr;
+        }
+
+        shared_array(unique_array<_Ty, _Deleter>&& _Unique)
+            : _Mypair(_Convert_array(_Unique.release()), ::std::move(_Unique.get_deleter())),
+            _Myctr(::bs::create_object<reference_counter>(1)) {}
+
+        ~shared_array() noexcept {
+            _Release();
+        }
+
+        shared_array& operator=(const shared_array& _Other) noexcept {
+            shared_array(_Other).swap(*this);
+            return *this;
+        }
+
+        shared_array& operator=(shared_array&& _Other) noexcept {
+            shared_array(::std::move(_Other)).swap(*this);
+            return *this;
+        }
+
+        shared_array& operator=(unique_array<_Ty, _Deleter>&& _Unique) noexcept {
+            shared_array(::std::move(_Unique)).swap(*this);
+            return *this;
+        }
+
+        explicit operator bool() const noexcept {
+            const array_type& _Array = _Mypair.first();
+            return _Array.ptr != nullptr && _Array.size > 0;
+        }
+
+        element_type& operator[](const size_t _Idx) const {
+            const array_type& _Array = _Mypair.first();
+            if (_Idx >= _Array.size) { // index out of bounds, raise an exception
+                resource_overrun::raise();
+            }
+
+            return _Array.ptr[_Idx];
+        }
+
+        pointer get() const noexcept {
+            return _Mypair.first().ptr;
+        }
+
+        size_t size() const noexcept {
+            return _Mypair.first().size;
+        }
+
+        deleter_type& get_deleter() noexcept {
+            return _Mypair.second();
+        }
+
+        const deleter_type& get_deleter() const noexcept {
+            return _Mypair.second();
+        }
+
+        long use_count() const noexcept {
+            return _Myctr ? _Myctr->use_count() : 0;
+        }
+
+        void reset() {
+            shared_array().swap(*this);
+        }
+
+        void reset(const array_type _New_array) {
+            shared_array(_New_array).swap(*this);
+        }
+
+        void reset(const array_type _New_array, _Deleter _New_del) {
+            shared_array(_New_array, _New_del).swap(*this);
+        }
+
+        void swap(shared_array& _Other) noexcept {
+            _Mypair.swap(_Other._Mypair);
+            ::std::swap(_Myctr, _Other._Myctr);
+        }
+
+    private:
+        static array_type _Convert_array(const unique_array<_Ty, _Deleter>::array_type _Array) noexcept {
+            return {_Array.ptr, _Array.size};
+        }
+
+        void _Release() {
+            // decrement the reference counter and destroy the resource if this is the last reference
+            if (_Myctr && _Myctr->decrement() == 0) {
+                array_type& _Array = _Mypair.first();
+                _Mypair.second()(_Array.ptr, _Array.size); // destroys _Array
+                ::bs::delete_object(_Myctr);
+                _Array.ptr  = nullptr;
+                _Array.size = 0;
+                _Myctr      = nullptr;
+            }
+        }
+
+        compressed_pair<array_type, _Deleter> _Mypair;
+        reference_counter* _Myctr;
+    };
+
+    template <class _Ty, class _Deleter>
+    bool operator==(const shared_array<_Ty, _Deleter>& _Left, const shared_array<_Ty, _Deleter>& _Right) noexcept {
+        return _Left.get() == _Right.get() && _Left.size() == _Right.size();
+    }
+
+    template <class _Ty, class _Deleter>
+    bool operator==(const shared_array<_Ty, _Deleter>& _Left, ::std::nullptr_t) noexcept {
+        return _Left.get() == nullptr && _Left.size() == 0;
+    }
+
+    template <class _Ty, class _Deleter>
+    ::std::strong_ordering operator<=>(
+        const shared_array<_Ty, _Deleter>& _Left, const shared_array<_Ty, _Deleter>& _Right) noexcept {
+        const auto _Result = _Left.get() <=> _Right.get();
+        if (_Result != ::std::strong_ordering::equal) { // different pointers, break
+            return _Result;
+        }
+
+        // if the pointers are equal, then compare the sizes
+        return _Left.size() <=> _Right.size();
+    }
+
+    template <class _Ty>
+    shared_array<_Ty> make_shared_array(const size_t _Size) {
+        // create a shared array that manages a newly created object array
+        return shared_array<_Ty>{{::bs::create_object_array<_Ty>(_Size), _Size}};
+    }
 } // namespace bs
 
 #endif // _BSTK_MEMORY_SMART_POINTER_HPP_
