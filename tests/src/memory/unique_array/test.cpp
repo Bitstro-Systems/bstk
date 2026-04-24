@@ -95,8 +95,7 @@ namespace bs {
 
     TEST(unique_array, size) {
         constexpr size_t _Size = 16;
-        int* const _Ptr        = ::bs::create_object_array<int>(_Size);
-        const unique_array<int> _Unique({_Ptr, _Size}); // destroys _Ptr
+        const auto _Unique     = ::bs::make_unique_array<int>(_Size);
         EXPECT_EQ(_Unique.size(), _Size);
     }
 
