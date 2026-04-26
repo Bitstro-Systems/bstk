@@ -37,10 +37,10 @@ namespace bs {
     }
 
     TEST(reference_counter, parallel_increment) {
-        // Note: Should test parallel increment once threading is implemented.
+        // Revisit: Should test parallel increment (requires concurrency support).
     }
 
     TEST(reference_counter, parallel_decrement) {
-        // Note: Should test parallel decrement once threading is implemented.
+        // Revisit: Should test parallel decrement (requires concurrency support).
     }
 } // namespace bs

@@ -17,17 +17,17 @@
 // generic assertion macros, useful in debug mode
 #if _BS_WINDOWS
 #define _REPORT_ERROR(_Fmt, ...) \
-    ::_CrtDbgReport(_CRT_ERROR, __FILE__, __LINE__, nullptr, _Fmt, __VA_ARGS__)
+    ::_CrtDbgReport(_CRT_ERROR, __FILE__, __LINE__, nullptr, _Fmt, ##__VA_ARGS__)
 #else // ^^^ _BS_WINDOWS ^^^ / vvv _BS_LINUX vvv
 #define _REPORT_ERROR(_Fmt, ...)                                               \
     ::fprintf(stderr, "%s:%d: %s: ", __FILE__, __LINE__, __PRETTY_FUNCTION__); \
-    ::fprintf(stderr, _Fmt, __VA_ARGS__);                                      \
+    ::fprintf(stderr, _Fmt, ##__VA_ARGS__);                                    \
     ::abort()
 #endif // _BS_WINDOWS
 
-#define _INTERNAL_ASSERT(_Cond, _Fmt, ...) \
-    if (!(_Cond)) {                        \
-        _REPORT_ERROR(_Fmt, __VA_ARGS__);  \
+#define _INTERNAL_ASSERT(_Cond, _Fmt, ...)  \
+    if (!(_Cond)) {                         \
+        _REPORT_ERROR(_Fmt, ##__VA_ARGS__); \
     }
 
 namespace bs {

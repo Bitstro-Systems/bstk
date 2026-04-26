@@ -22,6 +22,9 @@ function(add_isolated_test test_name test_path)
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 
+add_isolated_test(test_concurrency_lock_guard "src/concurrency/lock_guard/test.cpp")
+add_isolated_test(test_concurrency_shared_lock "src/concurrency/shared_lock/test.cpp")
+add_isolated_test(test_concurrency_shared_lock_guard "src/concurrency/shared_lock_guard/test.cpp")
 add_isolated_test(test_core_bitmask "src/core/bitmask/test.cpp")
 add_isolated_test(test_core_compressed_pair "src/core/compressed_pair/test.cpp")
 add_isolated_test(test_core_exception "src/core/exception/test.cpp")
@@ -45,6 +48,9 @@ add_isolated_test(test_memory_unique_ptr "src/memory/unique_ptr/test.cpp")
 # this allows only one post-build call instead of per-test copying
 add_custom_target(bstk_and_tests ALL DEPENDS
     bstk
+    test_concurrency_lock_guard
+    test_concurrency_shared_lock
+    test_concurrency_shared_lock_guard
     test_core_bitmask
     test_core_compressed_pair
     test_core_exception

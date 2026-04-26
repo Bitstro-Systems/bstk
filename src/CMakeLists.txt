@@ -5,6 +5,15 @@
 
 cmake_minimum_required(VERSION 3.30.0)
 
+set(BSTK_CONCURRENCY_INC_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/lock.hpp"
+)
+set(BSTK_CONCURRENCY_SRC_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/lock.cpp"
+)
+set(BSTK_CONCURRENCY_IMPL_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/impl/shared_lock.hpp"
+)
 set(BSTK_CORE_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/bitmask.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/core/compressed_pair.hpp"
@@ -135,6 +144,8 @@ else()
 endif()
 
 # organize source files into directories for better readability
+source_group("src/concurrency" FILES ${BSTK_CONCURRENCY_INC_FILES} ${BSTK_CONCURRENCY_SRC_FILES})
+source_group("src/concurrency/impl" FILES ${BSTK_CONCURRENCY_IMPL_FILES})
 source_group("src/core" FILES ${BSTK_CORE_INC_FILES} ${BSTK_CORE_SRC_FILES})
 source_group("src/core/impl" FILES ${BSTK_CORE_IMPL_FILES})
 source_group("src/memory" FILES ${BSTK_MEMORY_INC_FILES} ${BSTK_MEMORY_SRC_FILES})
@@ -142,7 +153,9 @@ source_group("src/memory/impl" FILES ${BSTK_MEMORY_IMPL_FILES})
 source_group("res" FILES ${BSTK_RES_FILES})
 
 # add the BSTK shared library and adjust its properties
-add_library(bstk SHARED ${BSTK_CORE_INC_FILES} ${BSTK_CORE_SRC_FILES} ${BSTK_CORE_IMPL_FILES}
+add_library(bstk SHARED
+    ${BSTK_CONCURRENCY_INC_FILES} ${BSTK_CONCURRENCY_SRC_FILES} ${BSTK_CONCURRENCY_IMPL_FILES}
+    ${BSTK_CORE_INC_FILES} ${BSTK_CORE_SRC_FILES} ${BSTK_CORE_IMPL_FILES}
     ${BSTK_MEMORY_INC_FILES} ${BSTK_MEMORY_SRC_FILES} ${BSTK_MEMORY_IMPL_FILES})
 target_compile_definitions(bstk PRIVATE _BSTK_BUILD=1 PUBLIC ${BSTK_DEFS})
 target_compile_features(bstk PRIVATE cxx_std_20)
