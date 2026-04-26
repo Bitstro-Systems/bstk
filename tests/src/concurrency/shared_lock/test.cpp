@@ -9,7 +9,7 @@
 #include <thread>
 
 namespace bs {
-    // Revisit: Should use internal concurrency.
+    // Revisit: Should use common concurrency features.
 
     enum class _Lock_mode : bool {
         _Exclusive,
