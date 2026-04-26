@@ -43,7 +43,7 @@ namespace bs {
     ::std::jthread _Start_locking_thread(
         const _Lock_mode _Mode, shared_lock& _Lock, ::std::atomic<bool>& _Locked) {
         return ::std::jthread{
-            [&]{
+            [_Mode, &_Lock, &_Locked]{
                 _Lock_guard _Guard{_Lock, _Mode}; // yields execution
                 _Locked.store(true, ::std::memory_order_release);
             }
@@ -58,13 +58,14 @@ namespace bs {
         ::std::atomic<bool> _Locked = false;
         shared_lock _Lock;
         _Lock.lock();
+        {
+            const ::std::jthread _Thread = _Start_locking_thread(_Lock_mode::_Exclusive, _Lock, _Locked);
+            _Wait_ms(50); // wait for thread start
+            EXPECT_FALSE(_Locked.load(::std::memory_order_acquire));
 
-        ::std::jthread _Thread = _Start_locking_thread(_Lock_mode::_Exclusive, _Lock, _Locked);
-        _Wait_ms(50); // wait for thread start
-        EXPECT_FALSE(_Locked.load(::std::memory_order_acquire));
+            _Lock.unlock();
+        }
 
-        _Lock.unlock();
-        _Thread.join(); // wait for thread exit
         EXPECT_TRUE(_Locked.load(::std::memory_order_acquire));
     }
 
@@ -72,11 +73,12 @@ namespace bs {
         ::std::atomic<bool> _Locked = false;
         shared_lock _Lock;
         _Lock.lock_shared();
-
-        const ::std::jthread _Thread = _Start_locking_thread(_Lock_mode::_Shared, _Lock, _Locked);
-        _Wait_ms(50); // wait for thread start
-        EXPECT_TRUE(_Locked.load(::std::memory_order_acquire));
-
-        _Lock.unlock_shared();
+        {
+            const ::std::jthread _Thread = _Start_locking_thread(_Lock_mode::_Shared, _Lock, _Locked);
+            _Wait_ms(50); // wait for thread start
+            EXPECT_TRUE(_Locked.load(::std::memory_order_acquire));
+            
+            _Lock.unlock_shared();
+        }
     }
 } // namespace bs
