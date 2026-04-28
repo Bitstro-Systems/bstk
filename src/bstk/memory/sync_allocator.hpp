@@ -9,6 +9,7 @@
 #include <bstk/concurrency/lock.hpp>
 #include <bstk/core/export.hpp>
 #include <bstk/memory/allocator.hpp>
+#include <utility>
 
 namespace bs {
     class _BSTK_EXPORT sync_allocator : public allocator { // thread-safe wrapper around a provided allocator
