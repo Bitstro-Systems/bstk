@@ -38,4 +38,8 @@ namespace bs {
         EXPECT_TRUE(_Al.is_equal(_Al2));
         EXPECT_TRUE(_Al2.is_equal(_Al));
     }
+
+    TEST_F(system_allocator_test, is_thread_safe) {
+        EXPECT_TRUE(_Al.is_thread_safe());
+    }
 } // namespace bs

@@ -31,6 +31,10 @@ namespace bs {
             return true;
         }
 
+        bool is_thread_safe() const noexcept override {
+            return false;
+        }
+
         [[nodiscard]] pointer allocate(size_type _Size, size_type _Align) override {
             _Capture_allocation_size(_Size, _Align);
             return nullptr;
@@ -84,6 +88,10 @@ namespace bs {
 
     TEST_F(object_allocator_test, is_equal) {
         EXPECT_TRUE(_Al.is_equal(_Real_al));
+    }
+
+    TEST_F(object_allocator_test, is_thread_safe) {
+        EXPECT_EQ(_Al.is_thread_safe(), _Real_al.is_thread_safe());
     }
 
     TEST_F(object_allocator_test, allocate_type_alignment) {

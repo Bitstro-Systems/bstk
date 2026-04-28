@@ -36,6 +36,9 @@ namespace bs {
         // compares for equality with another allocator
         bool is_equal(const allocator& _Other) const noexcept override;
 
+        // indicates whether concurrent access is thread-safe
+        bool is_thread_safe() const noexcept override;
+
         // allocates uninitialized storage with optional alignment
         [[nodiscard]] pointer allocate(size_type _Size, size_type _Align = 0) override;
 
