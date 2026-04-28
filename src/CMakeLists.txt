@@ -39,6 +39,7 @@ set(BSTK_MEMORY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/object_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/smart_pointer.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/sync_allocator.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/system_allocator.hpp"
 )
 set(BSTK_MEMORY_SRC_FILES
@@ -46,6 +47,7 @@ set(BSTK_MEMORY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/memory_block.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/memory_block_view.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/reference_counter.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/sync_allocator.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/memory/system_allocator.cpp"
 )
 set(BSTK_MEMORY_IMPL_FILES

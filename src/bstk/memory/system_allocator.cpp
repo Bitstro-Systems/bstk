@@ -46,6 +46,10 @@ namespace bs {
         return dynamic_cast<const system_allocator*>(::std::addressof(_Other)) != nullptr;
     }
 
+    bool system_allocator::is_thread_safe() const noexcept {
+        return true;
+    }
+
     system_allocator::pointer system_allocator::allocate(size_type _Size, size_type _Align) {
         if (_Size == 0) { // no allocation, do nothing
             return nullptr;

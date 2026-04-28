@@ -4,6 +4,7 @@
 // Licensed under BSDL 1.0
 
 #include <bstk/memory/allocator.hpp>
+#include <bstk/memory/sync_allocator.hpp>
 #include <bstk/memory/system_allocator.hpp>
 #include <gtest/gtest.h>
 
@@ -28,6 +29,10 @@ namespace bs {
 
         bool is_equal(const allocator&) const noexcept override {
             return false;
+        }
+
+        bool is_thread_safe() const noexcept override {
+            return true;
         }
 
         [[nodiscard]] pointer allocate(size_type, size_type) override {
@@ -65,6 +70,10 @@ namespace bs {
             return false;
         }
 
+        bool is_thread_safe() const noexcept {
+            return true;
+        }
+
         [[nodiscard]] pointer allocate(size_type, size_type) {
             return nullptr;
         }
@@ -73,6 +82,7 @@ namespace bs {
     };
 
     TEST(any_allocator, standard_allocator) {
+        EXPECT_TRUE(any_allocator<sync_allocator>);
         EXPECT_TRUE(any_allocator<system_allocator>);
     }
 
@@ -82,6 +92,7 @@ namespace bs {
     }
 
     TEST(is_allocator, standard_allocator) {
+        EXPECT_TRUE(is_allocator<sync_allocator>::value);
         EXPECT_TRUE(is_allocator<system_allocator>::value);
     }
 

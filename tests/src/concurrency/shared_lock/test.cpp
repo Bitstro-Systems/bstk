@@ -43,7 +43,7 @@ namespace bs {
     ::std::jthread _Start_locking_thread(
         const _Lock_mode _Mode, shared_lock& _Lock, ::std::atomic<bool>& _Locked) {
         return ::std::jthread{
-            [_Mode, &_Lock, &_Locked]{
+            [_Mode, &_Lock, &_Locked] {
                 _Lock_guard _Guard{_Lock, _Mode}; // yields execution
                 _Locked.store(true, ::std::memory_order_release);
             }

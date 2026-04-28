@@ -14,7 +14,8 @@
 namespace bs {
     enum class allocator_id : unsigned char {
         none   = 0,
-        system = 1
+        system = 1,
+        sync   = 2
     };
 
     class _BSTK_EXPORT _BSTK_NOVTABLE allocator { // interface for custom memory allocation
@@ -41,6 +42,9 @@ namespace bs {
 
         // compares for equality with another allocator
         virtual bool is_equal(const allocator& _Other) const noexcept = 0;
+
+        // indicates whether concurrent access is thread-safe
+        virtual bool is_thread_safe() const noexcept = 0;
 
         // allocates uninitialized storage with optional alignment
         [[nodiscard]] virtual pointer allocate(size_type _Size, size_type _Align = 0) = 0;

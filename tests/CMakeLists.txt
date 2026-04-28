@@ -16,9 +16,10 @@ function(add_isolated_test test_name test_path)
     target_compile_features(${test_name} PRIVATE cxx_std_20)
     target_include_directories(${test_name} PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/../src"
+        "${gmock_SOURCE_DIR}/include"
         "${gtest_SOURCE_DIR}/include"
     )
-    target_link_libraries(${test_name} PRIVATE bstk gtest gtest_main)
+    target_link_libraries(${test_name} PRIVATE bstk gmock gtest gtest_main)
     add_test(NAME ${test_name} COMMAND ${test_name})
 endfunction()
 
@@ -40,6 +41,7 @@ add_isolated_test(test_memory_reference_counter "src/memory/reference_counter/te
 add_isolated_test(test_memory_shared_array "src/memory/shared_array/test.cpp")
 add_isolated_test(test_memory_shared_ptr "src/memory/shared_ptr/test.cpp")
 add_isolated_test(test_memory_smart_pointer "src/memory/smart_pointer/test.cpp")
+add_isolated_test(test_memory_sync_allocator "src/memory/sync_allocator/test.cpp")
 add_isolated_test(test_memory_system_allocator "src/memory/system_allocator/test.cpp")
 add_isolated_test(test_memory_unique_array "src/memory/unique_array/test.cpp")
 add_isolated_test(test_memory_unique_ptr "src/memory/unique_ptr/test.cpp")
@@ -66,6 +68,7 @@ add_custom_target(bstk_and_tests ALL DEPENDS
     test_memory_shared_array
     test_memory_shared_ptr
     test_memory_smart_pointer
+    test_memory_sync_allocator
     test_memory_system_allocator
     test_memory_unique_array
     test_memory_unique_ptr
