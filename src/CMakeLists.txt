@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.30.0)
 
 set(BSTK_CONCURRENCY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/lock.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/shared_resource.hpp"
 )
 set(BSTK_CONCURRENCY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/lock.cpp"

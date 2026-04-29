@@ -26,6 +26,7 @@ endfunction()
 add_isolated_test(test_concurrency_lock_guard "src/concurrency/lock_guard/test.cpp")
 add_isolated_test(test_concurrency_shared_lock "src/concurrency/shared_lock/test.cpp")
 add_isolated_test(test_concurrency_shared_lock_guard "src/concurrency/shared_lock_guard/test.cpp")
+add_isolated_test(test_concurrency_shared_resource "src/concurrency/shared_resource/test.cpp")
 add_isolated_test(test_core_bitmask "src/core/bitmask/test.cpp")
 add_isolated_test(test_core_compressed_pair "src/core/compressed_pair/test.cpp")
 add_isolated_test(test_core_exception "src/core/exception/test.cpp")
@@ -53,6 +54,7 @@ add_custom_target(bstk_and_tests ALL DEPENDS
     test_concurrency_lock_guard
     test_concurrency_shared_lock
     test_concurrency_shared_lock_guard
+    test_concurrency_shared_resource
     test_core_bitmask
     test_core_compressed_pair
     test_core_exception
