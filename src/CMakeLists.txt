@@ -8,9 +8,11 @@ cmake_minimum_required(VERSION 3.30.0)
 set(BSTK_CONCURRENCY_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/lock.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/shared_resource.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/sync_flag.hpp"
 )
 set(BSTK_CONCURRENCY_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/lock.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/sync_flag.cpp"
 )
 set(BSTK_CONCURRENCY_IMPL_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/concurrency/impl/shared_lock.hpp"
