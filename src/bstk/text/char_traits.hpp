@@ -8,6 +8,7 @@
 #define _BSTK_TEXT_CHAR_TRAITS_HPP_
 #include <bstk/core/export.hpp>
 #include <compare>
+#include <cstddef>
 #include <type_traits>
 
 namespace bs {
