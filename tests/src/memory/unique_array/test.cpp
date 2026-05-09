@@ -76,14 +76,7 @@ namespace bs {
     TEST(unique_array, subscript_invalid) {
         constexpr size_t _Size = 16;
         const auto _Unique     = ::bs::make_unique_array<int>(_Size);
-        bool _Caught           = false;
-        try {
-            _Unique[_Size + 1];
-        } catch (const resource_overrun&) {
-            _Caught = true;
-        }
-
-        EXPECT_TRUE(_Caught);
+        EXPECT_THROW(_Unique[_Size + 1], resource_overrun);
     }
 
     TEST(unique_array, get) {

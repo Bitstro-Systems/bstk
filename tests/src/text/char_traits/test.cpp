@@ -8,15 +8,15 @@
 
 namespace bs {
     TEST(char_traits, valid_element_type) {
-        EXPECT_TRUE(bstk::_Char_traits_element<byte_t>);
-        EXPECT_TRUE(bstk::_Char_traits_element<char>);
-        EXPECT_TRUE(bstk::_Char_traits_element<wchar_t>);
+        EXPECT_TRUE(bstk::_Char_type<byte_t>);
+        EXPECT_TRUE(bstk::_Char_type<char>);
+        EXPECT_TRUE(bstk::_Char_type<wchar_t>);
     }
 
     TEST(char_traits, invalid_element_type) {
-        EXPECT_FALSE(bstk::_Char_traits_element<char8_t>);
-        EXPECT_FALSE(bstk::_Char_traits_element<char16_t>);
-        EXPECT_FALSE(bstk::_Char_traits_element<char32_t>);
+        EXPECT_FALSE(bstk::_Char_type<char8_t>);
+        EXPECT_FALSE(bstk::_Char_type<char16_t>);
+        EXPECT_FALSE(bstk::_Char_type<char32_t>);
     }
 
     TEST(char_traits, assign) {
@@ -79,13 +79,5 @@ namespace bs {
         EXPECT_EQ(_Traits::find("C++23", 5, '6'), _Traits::npos);
         EXPECT_EQ(_Traits::find("string_view", 11, "view", 4), 7);
         EXPECT_EQ(_Traits::find("string_view", 11, "utf8", 4), _Traits::npos);
-    }
-
-    TEST(char_traits, rfind) {
-        using _Traits = char_traits<char>;
-        EXPECT_EQ(_Traits::rfind("AB AB AB", 8, 'B'), 7);
-        EXPECT_EQ(_Traits::rfind("AB AB AB", 8, 'C'), _Traits::npos);
-        EXPECT_EQ(_Traits::rfind("AB CD AB CD", 11, "AB", 2), 6);
-        EXPECT_EQ(_Traits::rfind("AB CD AB CD", 11, "ABC", 3), _Traits::npos);
     }
 } // namespace bs

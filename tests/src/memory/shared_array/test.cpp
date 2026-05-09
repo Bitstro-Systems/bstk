@@ -125,14 +125,7 @@ namespace bs {
     TEST(shared_array, subscript_invalid) {
         constexpr size_t _Size = 16;
         const auto _Shared     = ::bs::make_shared_array<int>(_Size);
-        bool _Caught           = false;
-        try {
-            _Shared[_Size + 1];
-        } catch (const resource_overrun&) {
-            _Caught = true;
-        }
-
-        EXPECT_TRUE(_Caught);
+        EXPECT_THROW(_Shared[_Size + 1], resource_overrun);
     }
 
     TEST(shared_array, get) {

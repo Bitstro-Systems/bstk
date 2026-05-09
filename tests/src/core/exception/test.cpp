@@ -8,41 +8,14 @@
 
 namespace bs {
     TEST(exception, allocation_failure) {
-        bool _Caught = false;
-        try {
-            allocation_failure::raise();
-        } catch (const allocation_failure&) {
-            _Caught = true;
-        } catch (...) {
-            // unexpected exception
-        }
-
-        EXPECT_TRUE(_Caught);
+        EXPECT_THROW(allocation_failure::raise(), allocation_failure);
     }
 
     TEST(exception, allocation_limit_exceeded) {
-        bool _Caught = false;
-        try {
-            allocation_limit_exceeded::raise();
-        } catch (const allocation_limit_exceeded&) {
-            _Caught = true;
-        } catch (...) {
-            // unexpected exception
-        }
-
-        EXPECT_TRUE(_Caught);
+        EXPECT_THROW(allocation_limit_exceeded::raise(), allocation_limit_exceeded);
     }
 
     TEST(exception, resource_overrun) {
-        bool _Caught = false;
-        try {
-            resource_overrun::raise();
-        } catch (const resource_overrun&) {
-            _Caught = true;
-        } catch (...) {
-            // unexpected exception
-        }
-
-        EXPECT_TRUE(_Caught);
+        EXPECT_THROW(resource_overrun::raise(), resource_overrun);
     }
 } // namespace bs

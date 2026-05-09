@@ -19,12 +19,12 @@ namespace bs {
         concept _Any_of = ::std::disjunction_v<::std::is_same<_Ty, _Types>...>;
 
         template <class _Elem>
-        concept _Char_traits_element = _Any_of<_Elem, byte_t, char, wchar_t>;
+        concept _Char_type = _Any_of<_Elem, byte_t, char, wchar_t>;
     } // namespace bstk
 
     template <class _Elem>
     struct _BSTK_EXPORT char_traits { // properties of a character type
-        static_assert(bstk::_Char_traits_element<_Elem>, "invalid element type for char_traits<_Elem>");
+        static_assert(bstk::_Char_type<_Elem>, "invalid element type for char_traits<_Elem>");
 
         using char_type           = _Elem;
         using comparison_category = ::std::strong_ordering;
@@ -54,11 +54,6 @@ namespace bs {
         // finds characters in a character sequence
         static size_t find(const char_type* const _Str, const size_t _Size, const char_type _Ch) noexcept;
         static size_t find(const char_type* const _Str, const size_t _Str_size,
-            const char_type* const _Substr, const size_t _Substr_size) noexcept;
-
-        // finds characters in a character sequence, searchs from the end
-        static size_t rfind(const char_type* const _Str,const size_t _Size, const char_type _Ch) noexcept;
-        static size_t rfind(const char_type* const _Str, const size_t _Str_size,
             const char_type* const _Substr, const size_t _Substr_size) noexcept;
     };
 } // namespace bs
