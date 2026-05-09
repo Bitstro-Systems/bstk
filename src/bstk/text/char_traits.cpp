@@ -86,52 +86,6 @@ namespace bs {
         return npos; // match not found
     }
 
-    template <class _Elem>
-    size_t char_traits<_Elem>::rfind(
-        const char_type* const _Str, const size_t _Size, const char_type _Ch) noexcept {
-        if (_Size == 0) { // no room for match
-            return npos;
-        }
-
-        for (const char_type* _Last = _Str + _Size - 1; _Last >= _Str; --_Last) {
-            if (*_Last == _Ch) { // match found
-                return _Last - _Str;
-            }
-        }
-
-        return npos; // match not found
-    }
-
-    template <class _Elem>
-    size_t char_traits<_Elem>::rfind(const char_type* const _Str, const size_t _Str_size,
-        const char_type* const _Substr, const size_t _Substr_size) noexcept {
-        if (_Substr_size == 0) { // empty string always matches
-            return _Str_size;
-        }
-
-        if (_Str_size == 0 || _Substr_size > _Str_size) { // no room for match
-            return npos;
-        }
-
-        if (_Substr_size == 1) { // search for a single character
-            return rfind(_Str, _Str_size, *_Substr);
-        } else if (_Substr_size == _Str_size) { // compare full strings
-            return eq(_Str, _Substr, _Substr_size) ? 0 : npos;
-        }
-
-        for (const char_type* _Last = _Str + _Str_size - _Substr_size;; --_Last) {
-            if (eq(_Last, _Substr, _Substr_size)) { // match found
-                return _Last - _Str;
-            }
-
-            if (_Last == _Str) { // at beginning, no more chance for match
-                return npos;
-            }
-        }
-
-        return npos; // match not found
-    }
-
     template struct _BSTK_EXPORT char_traits<byte_t>;
     template struct _BSTK_EXPORT char_traits<char>;
     template struct _BSTK_EXPORT char_traits<wchar_t>;

@@ -125,14 +125,7 @@ namespace bs {
 
     TEST(memory_block_view, block_invalid_bounds) {
         const memory_block_view _Block(_AS_PTR(0x1000'0000), 0x1000);
-        bool _Caught = false;
-        try {
-            _Block.block(0x2000);
-        } catch (const resource_overrun&) {
-            _Caught = true;
-        }
-
-        EXPECT_TRUE(_Caught);
+        EXPECT_THROW(_Block.block(0x2000), resource_overrun);
     }
 
     TEST(memory_block_view, swap) {

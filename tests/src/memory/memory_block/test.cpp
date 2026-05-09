@@ -279,14 +279,7 @@ namespace bs {
 
     TEST(memory_block, block_invalid_bounds) {
         const memory_block _Block(1024, 128);
-        bool _Caught = false;
-        try {
-            _Block.block(2048);
-        } catch (const resource_overrun&) {
-            _Caught = true;
-        }
-
-        EXPECT_TRUE(_Caught);
+        EXPECT_THROW(_Block.block(2048), resource_overrun);
     }
 
     TEST(memory_block, clear) {

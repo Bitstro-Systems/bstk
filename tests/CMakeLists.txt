@@ -48,6 +48,8 @@ add_isolated_test(test_memory_system_allocator "src/memory/system_allocator/test
 add_isolated_test(test_memory_unique_array "src/memory/unique_array/test.cpp")
 add_isolated_test(test_memory_unique_ptr "src/memory/unique_ptr/test.cpp")
 add_isolated_test(test_text_char_traits "src/text/char_traits/test.cpp")
+add_isolated_test(test_text_string_view "src/text/string_view/test.cpp")
+add_isolated_test(test_text_string_view_iterator "src/text/string_view_iterator/test.cpp")
 
 # use a custom target to combine all targets into a single one,
 # this allows only one post-build call instead of per-test copying
@@ -78,6 +80,8 @@ add_custom_target(bstk_and_tests ALL DEPENDS
     test_memory_unique_array
     test_memory_unique_ptr
     test_text_char_traits
+    test_text_string_view
+    test_text_string_view_iterator
 )
 add_custom_command(TARGET bstk_and_tests POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
