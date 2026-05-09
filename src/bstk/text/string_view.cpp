@@ -6,7 +6,7 @@
 #include <bstk/core/exception.hpp>
 #include <bstk/core/impl/utility.hpp>
 #include <bstk/text/string_view.hpp>
-#include <climits>
+#include <cstdint>
 #include <utility>
 
 namespace bs {
