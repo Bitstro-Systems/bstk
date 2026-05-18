@@ -8,6 +8,7 @@
 #define _BSTK_TEXT_STRING_VIEW_HPP_
 #include <bstk/core/export.hpp>
 #include <bstk/text/char_traits.hpp>
+#include <compare>
 #include <iterator>
 
 namespace bs {
@@ -80,7 +81,7 @@ namespace bs {
         friend string_view<_Elem>;
 
 #ifdef _DEBUG
-        string_view_iterator(pointer _First, pointer _Last) noexcept;
+        string_view_iterator(pointer _Begin, pointer _End) noexcept;
 #else // ^^^ _DEBUG ^^^ / vvv NDEBUG vvv
         explicit string_view_iterator(pointer _Ptr) noexcept;
 #endif // _DEBUG
@@ -222,6 +223,10 @@ namespace bs {
         size_type _Mysize;
     };
 
+    using byte_string_view    = string_view<byte_t>;
+    using utf8_string_view    = string_view<char>;
+    using unicode_string_view = string_view<wchar_t>;
+
     template <class _Elem>
     bool operator==(const string_view<_Elem> _Left, const string_view<_Elem> _Right) noexcept {
         return _Left.compare(_Right) == 0;
@@ -241,10 +246,6 @@ namespace bs {
     ::std::strong_ordering operator<=>(const string_view<_Elem> _Left, const _Elem* const _Right) noexcept {
         return _Left.compare(_Right) <=> 0;
     }
-
-    using byte_string_view    = string_view<byte_t>;
-    using utf8_string_view    = string_view<char>;
-    using unicode_string_view = string_view<wchar_t>;
 } // namespace bs
 
 #endif // _BSTK_TEXT_STRING_VIEW_HPP_

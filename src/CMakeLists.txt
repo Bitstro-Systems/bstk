@@ -60,10 +60,12 @@ set(BSTK_MEMORY_IMPL_FILES
 )
 set(BSTK_TEXT_INC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/text/char_traits.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/text/string.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/text/string_view.hpp"
 )
 set(BSTK_TEXT_SRC_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/text/char_traits.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/bstk/text/string.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/bstk/text/string_view.cpp"
 )
 set(BSTK_TEXT_IMPL_FILES
