@@ -6,6 +6,7 @@
 #include <bstk/core/exception.hpp>
 #include <bstk/core/impl/utility.hpp>
 #include <bstk/text/string.hpp>
+#include <cstdint>
 #include <utility>
 
 namespace bs {
@@ -412,7 +413,7 @@ namespace bs {
     template <class _Elem>
     void string<_Elem>::_Construct_from_ptr(const_pointer _Ptr, const size_type _Count) {
         _Construct(_Count,
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 traits_type::copy(_New_ptr, _Ptr, _Count);
             }
         );
@@ -421,7 +422,7 @@ namespace bs {
     template <class _Elem>
     void string<_Elem>::_Construct_from_chars(const size_type _Count, const value_type _Ch) {
         _Construct(_Count,
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 traits_type::assign(_New_ptr, _Count, _Ch);
             }
         );
@@ -430,7 +431,7 @@ namespace bs {
     template <class _Elem>
     void string<_Elem>::_Reallocate_assign(const size_type _Count, const value_type _Ch) {
         _Reallocate(_Count,
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 traits_type::assign(_New_ptr, _Count, _Ch);
             }
         );
@@ -439,7 +440,7 @@ namespace bs {
     template <class _Elem>
     void string<_Elem>::_Reallocate_assign(const_pointer _Ptr, const size_type _Count) {
         _Reallocate(_Count,
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 traits_type::copy(_New_ptr, _Ptr, _Count);
             }
         );
@@ -448,7 +449,7 @@ namespace bs {
     template <class _Elem>
     void string<_Elem>::_Reallocate_insert_back(const size_type _Count, const value_type _Ch) {
         _Reallocate(_Mybuf._Size + _Count,
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 traits_type::copy(_New_ptr, _Mybuf._Get(), _Mybuf._Size);
                 traits_type::assign(_New_ptr + _Mybuf._Size, _Count, _Ch);
             }
@@ -458,7 +459,7 @@ namespace bs {
     template <class _Elem>
     void string<_Elem>::_Reallocate_insert_back(const_pointer _Ptr, const size_type _Count) {
         _Reallocate(_Mybuf._Size + _Count,
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 traits_type::copy(_New_ptr, _Mybuf._Get(), _Mybuf._Size);
                 traits_type::copy(_New_ptr + _Mybuf._Size, _Ptr, _Count);
             }
@@ -469,7 +470,7 @@ namespace bs {
     void string<_Elem>::_Reallocate_insert_at(
         const size_type _Off, const size_type _Count, const value_type _Ch) {
         _Reallocate(_Mybuf._Size + _Count,
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 pointer _Old_ptr = _Mybuf._Get();
                 traits_type::copy(_New_ptr, _Old_ptr, _Off);
                 traits_type::assign(_New_ptr + _Off, _Count, _Ch);
@@ -482,7 +483,7 @@ namespace bs {
     void string<_Elem>::_Reallocate_insert_at(
         const size_type _Off, const_pointer _Ptr, const size_type _Count) {
         _Reallocate(_Mybuf._Size + _Count,
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 pointer _Old_ptr = _Mybuf._Get();
                 traits_type::copy(_New_ptr, _Old_ptr, _Off);
                 traits_type::copy(_New_ptr + _Off, _Ptr, _Count);
@@ -495,7 +496,7 @@ namespace bs {
     void string<_Elem>::_Reallocate_replace(
         const size_type _Off, const size_type _Count, const size_type _Ch_count, const value_type _Ch) {
         _Reallocate(_Mybuf._Size + (_Ch_count - _Count), // assumes growth
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 pointer _Old_ptr = _Mybuf._Get();
                 traits_type::copy(_New_ptr, _Old_ptr, _Off);
                 traits_type::assign(_New_ptr + _Off, _Ch_count, _Ch);
@@ -509,7 +510,7 @@ namespace bs {
     void string<_Elem>::_Reallocate_replace(
         const size_type _Off, const size_type _Count, const_pointer _Ptr, const size_type _Ptr_count) {
         _Reallocate(_Mybuf._Size + (_Ptr_count - _Count), // assumes growth
-            [=](pointer _New_ptr) noexcept {
+            [&](pointer _New_ptr) noexcept {
                 pointer _Old_ptr = _Mybuf._Get();
                 traits_type::copy(_New_ptr, _Old_ptr, _Off);
                 traits_type::copy(_New_ptr + _Off, _Ptr, _Ptr_count);
