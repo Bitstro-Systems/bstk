@@ -84,7 +84,7 @@ namespace bs {
     string_view_iterator<_Elem>& string_view_iterator<_Elem>::operator--() noexcept {
 #ifdef _DEBUG
         _INTERNAL_ASSERT(_Myptr != nullptr, "attempt to use invalid iterator");
-        _INTERNAL_ASSERT(_Myptr - _Mybegin > 0, "attempt to retreat iterator that points to the beginning");
+        _INTERNAL_ASSERT(_Myptr - _Mybegin > 0, "attempt to move backward iterator that points to the beginning");
 #endif // _DEBUG
         --_Myptr;
         return *this;
@@ -111,7 +111,7 @@ namespace bs {
     string_view_iterator<_Elem>& string_view_iterator<_Elem>::operator-=(const difference_type _Off) noexcept {
 #ifdef _DEBUG
         _INTERNAL_ASSERT(_Myptr != nullptr, "attempt to use invalid iterator");
-        _INTERNAL_ASSERT(_Myptr - _Mybegin >= _Off, "attempt to retreat iterator beyond the beginning");
+        _INTERNAL_ASSERT(_Myptr - _Mybegin >= _Off, "attempt to move backward iterator beyond the beginning");
 #endif // _DEBUG
         _Myptr -= _Off;
         return *this;
