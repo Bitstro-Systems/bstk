@@ -45,7 +45,7 @@ namespace bs {
                 size_t _Trailing;
                 uint8_t _Byte;
                 for (; _Str != _Last; ++_Count) {
-                    _Byte = static_cast<uint8_t>(*_Str);
+                    _Byte = static_cast<uint8_t>(*_Str++);
                     if (_Byte <= 0x7F) { // 0XXXXXXX pattern, single byte
                         _Trailing = 0;
                     } else if (_Byte >= 0xC0 && _Byte <= 0xDF) { // 110XXXXX pattern, two bytes

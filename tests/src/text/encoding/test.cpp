@@ -9,12 +9,12 @@
 namespace bs {
     void _Test_transcode(const wchar_t* const _Unicode, const char* const _Utf8) {
         const utf8_string _Utf8_str   = ::bs::to_utf8_string(_Unicode);
-        const unicode_string _Unc_str = ::bs::to_unicode_string(_Utf8_str);
+        const unicode_string _Unc_str = ::bs::to_unicode_string(_Utf8);
         EXPECT_EQ(_Utf8_str, _Utf8);
         EXPECT_EQ(_Unc_str, _Unicode);
 
         const size_t _Utf8_size = ::bs::utf8_string_size(_Unicode);
-        const size_t _Unc_size  = ::bs::unicode_string_size(_Utf8_str);
+        const size_t _Unc_size  = ::bs::unicode_string_size(_Utf8);
         EXPECT_EQ(_Utf8_size, _Utf8_str.size());
         EXPECT_EQ(_Unc_size, _Unc_str.size());
     }
