@@ -29,7 +29,7 @@ namespace bs {
             using _Intern_type = _Elem;
             using _Extern_type = wchar_t;
 
-            static size_t _Transcode_size(const _Elem* const _Str, const size_t _Size) noexcept {
+            static size_t _Transcode_size(const _Elem* _Str, const size_t _Size) noexcept {
                 // calculate the required buffer size for _Str decoding (null-terminator excluded)
                 if (_Size == 0) {
                     return 0;
@@ -69,8 +69,8 @@ namespace bs {
 #endif // _BS_WINDOWS
             }
 
-            static bool _Transcode(const _Elem* const _Str, const size_t _Str_size,
-                wchar_t* const _Buf, const size_t _Buf_size) noexcept {
+            static bool _Transcode(const _Elem* _Str, const size_t _Str_size,
+                wchar_t* _Buf, const size_t _Buf_size) noexcept {
                 // decode the given string from UTF-8 to Unicode
 #if _BS_WINDOWS
                 return static_cast<size_t>(::MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS,
@@ -135,7 +135,7 @@ namespace bs {
             using _Intern_type = wchar_t;
             using _Extern_type = _Elem;
 
-            static size_t _Transcode_size(const wchar_t* const _Str, const size_t _Size) noexcept {
+            static size_t _Transcode_size(const wchar_t* _Str, const size_t _Size) noexcept {
                 // calculate the required buffer size for _Str encoding (null-terminator excluded)
                 if (_Size == 0) {
                     return 0;
@@ -146,7 +146,6 @@ namespace bs {
                     _Str, static_cast<int>(_Size), nullptr, 0, nullptr, nullptr);
                 return _Encoded_size > 0 ? static_cast<size_t>(_Encoded_size) : static_cast<size_t>(-1);
 #else // ^^^ _BS_WINDOWS ^^^ / vvv _BS_LINUX vvv
-                (void) _Buf_size;
                 const wchar_t* const _Last = _Str + _Size;
                 size_t _Count              = 0;
                 uint32_t _Code_point;
@@ -169,14 +168,15 @@ namespace bs {
 #endif // _BS_WINDOWS
             }
 
-            static bool _Transcode(const wchar_t* const _Str, const size_t _Str_size,
-                _Elem* const _Buf, const size_t _Buf_size) noexcept {
+            static bool _Transcode(const wchar_t* _Str, const size_t _Str_size,
+                _Elem* _Buf, const size_t _Buf_size) noexcept {
                 // encode the given string Unicode to UTF-8
 #if _BS_WINDOWS
                 return static_cast<size_t>(::WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS,
                     _Str, static_cast<int>(_Str_size), reinterpret_cast<char*>(_Buf),
                         static_cast<int>(_Buf_size), nullptr, nullptr)) == _Buf_size;
 #else // ^^^ _BS_WINDOWS ^^^ / vvv _BS_LINUX vvv
+                (void) _Buf_size;
                 const wchar_t* const _Last = _Str + _Str_size;
                 size_t _Trailing;
                 uint32_t _Code_point;
